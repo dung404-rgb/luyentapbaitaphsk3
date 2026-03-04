@@ -5,111 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siêu Ứng Dụng Học Tiếng Trung</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .main-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 600px;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .main-container { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
         h2 { text-align: center; color: #333; }
-        
-        /* CSS cho hệ thống Tab */
-        .tabs {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #ddd;
-        }
-        .tab-btn {
-            background: none;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #7f8c8d;
-            border-bottom: 3px solid transparent;
-            transition: 0.3s;
-        }
+        .tabs { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab-btn { background: none; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; font-weight: bold; color: #7f8c8d; border-bottom: 3px solid transparent; transition: 0.3s; }
         .tab-btn:hover { color: #3498db; }
-        .tab-btn.active {
-            color: #3498db;
-            border-bottom: 3px solid #3498db;
-        }
+        .tab-btn.active { color: #3498db; border-bottom: 3px solid #3498db; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
-        /* CSS chung cho form */
-        select, input[type="text"], button.action-btn {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        button.action-btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
+        select, input[type="text"], button.action-btn { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
+        button.action-btn { background-color: #3498db; color: white; border: none; cursor: pointer; font-weight: bold; }
         button.action-btn:hover { background-color: #2980b9; }
         button.secondary { background-color: #95a5a6; }
         button.secondary:hover { background-color: #7f8c8d; }
-
-        /* CSS phần Học Từ Vựng */
-        .chinese-word {
-            font-size: 48px;
-            font-weight: bold;
-            color: #e74c3c;
-            text-align: center;
-            margin: 20px 0;
-        }
+        .chinese-word { font-size: 48px; font-weight: bold; color: #e74c3c; text-align: center; margin: 20px 0; }
         #result-vocab { text-align: center; font-weight: bold; min-height: 40px; white-space: pre-line; }
-
-        /* CSS phần Bài tập (Điền từ & Đọc hiểu) */
-        .question-box {
-            background: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid #3498db;
-            border-radius: 4px;
-        }
-        .word-bank {
-            background: #e8f4f8;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            font-weight: bold;
-            line-height: 1.6;
-            font-size: 14px;
-        }
-        .passage {
-            background: #fffbea;
-            padding: 15px;
-            border: 1px dashed #f1c40f;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-        .options label {
-            display: block;
-            margin: 5px 0;
-            cursor: pointer;
-        }
+        .question-box { background: #f9f9f9; padding: 15px; margin-bottom: 15px; border-left: 4px solid #3498db; border-radius: 4px; }
+        .word-bank { background: #e8f4f8; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-weight: bold; line-height: 1.6; font-size: 14px; }
+        .passage { background: #fffbea; padding: 15px; border: 1px dashed #f1c40f; margin-bottom: 15px; line-height: 1.6; }
+        .options label { display: block; margin: 5px 0; cursor: pointer; }
         .correct { color: #2ecc71; font-weight: bold;}
         .incorrect { color: #e74c3c; font-weight: bold;}
         .warning { color: #f39c12; font-weight: bold;}
@@ -160,660 +75,87 @@
         <button class="action-btn" onclick="checkRead()">Chấm điểm Đọc Hiểu</button>
         <div id="result-read" style="margin-top: 15px; text-align: center;"></div>
     </div>
-
 </div>
 
 <script>
-    // ==========================================
-    // KHU VỰC DỮ LIỆU (JSON)
-    // ==========================================
-    
-    // 1. DỮ LIỆU TỪ VỰNG (10 BÀI)
     const vocabData = {
         "1": [
-            { word: "周末", pinyin: "zhoumo", meaning: "cuối tuần" },
-            { word: "打算", pinyin: "dasuan", meaning: "kế hoạch, dự định" },
-            { word: "啊", pinyin: "a", meaning: "dùng cuối câu" },
-            { word: "跟", pinyin: "gen", meaning: "cùng, với" },
-            { word: "一直", pinyin: "yizhi", meaning: "suốt, liên tục" },
-            { word: "游戏", pinyin: "youxi", meaning: "trò chơi" },
-            { word: "作业", pinyin: "zuoye", meaning: "bài tập về nhà" },
-            { word: "着急", pinyin: "zhaoji", meaning: "lo lắng" },
-            { word: "复习", pinyin: "fuxi", meaning: "ôn tập" },
-            { word: "面包", pinyin: "mianbao", meaning: "bánh mì" },
-            { word: "带", pinyin: "dai", meaning: "mang theo" },
-            { word: "地图", pinyin: "ditu", meaning: "bản đồ" },
-            { word: "搬", pinyin: "ban", meaning: "dọn, chuyển" },
-            { word: "现在", pinyin: "xianzai", meaning: "hiện tại" },
-            { word: "一起", pinyin: "yiqi", meaning: "cùng, với" },
-            { word: "咱们", pinyin: "zanmen", meaning: "chúng mình" },
-            { word: "走", pinyin: "zou", meaning: "đi" },
-            { word: "常", pinyin: "chang", meaning: "thường thường" },
-            { word: "时候", pinyin: "shihou", meaning: "khi, lúc" },
-            { word: "借", pinyin: "jie", meaning: "mượn" },
-            { word: "上网", pinyin: "shangwang", meaning: "lên mạng" },
-            { word: "网", pinyin: "wang", meaning: "mạng" },
-            { word: "查", pinyin: "cha", meaning: "tra" },
-            { word: "资料", pinyin: "ziliao", meaning: "tư liệu" },
-            { word: "总是", pinyin: "zongshi", meaning: "luôn luôn" },
-            { word: "安静", pinyin: "anjing", meaning: "yên tĩnh" },
-            { word: "晚上", pinyin: "wanshang", meaning: "buổi tối" },
-            { word: "课文", pinyin: "kewen", meaning: "bài đọc" },
-            { word: "预习", pinyin: "yuxi", meaning: "chuẩn bị bài" },
-            { word: "生词", pinyin: "shengci", meaning: "từ mới" },
-            { word: "或者", pinyin: "huozhe", meaning: "hoặc" },
-            { word: "练习", pinyin: "lianxi", meaning: "luyện tập" },
-            { word: "聊天儿", pinyin: "liaotianr", meaning: "tán gẫu" },
-            { word: "收发", pinyin: "shoufa", meaning: "nhận và gửi thư" },
-            { word: "收", pinyin: "shou", meaning: "nhận" },
-            { word: "发", pinyin: "fa", meaning: "gửi" },
-            { word: "邮件", pinyin: "youjian", meaning: "email" },
-            { word: "电影", pinyin: "dianying", meaning: "phim" },
-            { word: "电视剧", pinyin: "dianshiju", meaning: "phim truyền hình" },
-            { word: "电视", pinyin: "dianshi", meaning: "tivi" },
-            { word: "休息", pinyin: "xiuxi", meaning: "nghỉ ngơi" },
-            { word: "宿舍", pinyin: "sushe", meaning: "kí túc xá" },
-            { word: "公园", pinyin: "gongyuan", meaning: "công viên" },
-            { word: "超市", pinyin: "chaoshi", meaning: "siêu thị" },
-            { word: "东西", pinyin: "dongxi", meaning: "đồ, vật" }
+            { word: "周末", pinyin: "zhoumo", meaning: "cuối tuần" }, { word: "打算", pinyin: "dasuan", meaning: "kế hoạch, dự định" }, { word: "啊", pinyin: "a", meaning: "dùng cuối câu" }, { word: "跟", pinyin: "gen", meaning: "cùng, với" }, { word: "一直", pinyin: "yizhi", meaning: "suốt, liên tục" }, { word: "游戏", pinyin: "youxi", meaning: "trò chơi" }, { word: "作业", pinyin: "zuoye", meaning: "bài tập về nhà" }, { word: "着急", pinyin: "zhaoji", meaning: "lo lắng" }, { word: "复习", pinyin: "fuxi", meaning: "ôn tập" }, { word: "面包", pinyin: "mianbao", meaning: "bánh mì" }, { word: "带", pinyin: "dai", meaning: "mang theo" }, { word: "地图", pinyin: "ditu", meaning: "bản đồ" }, { word: "搬", pinyin: "ban", meaning: "dọn, chuyển" }, { word: "现在", pinyin: "xianzai", meaning: "hiện tại" }, { word: "一起", pinyin: "yiqi", meaning: "cùng, với" }, { word: "咱们", pinyin: "zanmen", meaning: "chúng mình" }, { word: "走", pinyin: "zou", meaning: "đi" }, { word: "常", pinyin: "chang", meaning: "thường thường" }, { word: "时候", pinyin: "shihou", meaning: "khi, lúc" }, { word: "借", pinyin: "jie", meaning: "mượn" }, { word: "上网", pinyin: "shangwang", meaning: "lên mạng" }, { word: "网", pinyin: "wang", meaning: "mạng" }, { word: "查", pinyin: "cha", meaning: "tra" }, { word: "资料", pinyin: "ziliao", meaning: "tư liệu" }, { word: "总是", pinyin: "zongshi", meaning: "luôn luôn" }, { word: "安静", pinyin: "anjing", meaning: "yên tĩnh" }, { word: "晚上", pinyin: "wanshang", meaning: "buổi tối" }, { word: "课文", pinyin: "kewen", meaning: "bài đọc" }, { word: "预习", pinyin: "yuxi", meaning: "chuẩn bị bài" }, { word: "生词", pinyin: "shengci", meaning: "từ mới" }, { word: "或者", pinyin: "huozhe", meaning: "hoặc" }, { word: "练习", pinyin: "lianxi", meaning: "luyện tập" }, { word: "聊天儿", pinyin: "liaotianr", meaning: "tán gẫu" }, { word: "收发", pinyin: "shoufa", meaning: "nhận và gửi thư" }, { word: "收", pinyin: "shou", meaning: "nhận" }, { word: "发", pinyin: "fa", meaning: "gửi" }, { word: "邮件", pinyin: "youjian", meaning: "email" }, { word: "电影", pinyin: "dianying", meaning: "phim" }, { word: "电视剧", pinyin: "dianshiju", meaning: "phim truyền hình" }, { word: "电视", pinyin: "dianshi", meaning: "tivi" }, { word: "休息", pinyin: "xiuxi", meaning: "nghỉ ngơi" }, { word: "宿舍", pinyin: "sushe", meaning: "kí túc xá" }, { word: "公园", pinyin: "gongyuan", meaning: "công viên" }, { word: "超市", pinyin: "chaoshi", meaning: "siêu thị" }, { word: "东西", pinyin: "dongxi", meaning: "đồ, vật" }
         ],
         "2": [
-            { word: "腿", pinyin: "tui", meaning: "chân" },
-            { word: "疼", pinyin: "teng", meaning: "đau, nhức" },
-            { word: "脚", pinyin: "jiao", meaning: "bàn chân" },
-            { word: "树", pinyin: "shu", meaning: "cây" },
-            { word: "容易", pinyin: "rongyi", meaning: "dễ dàng" },
-            { word: "难", pinyin: "nan", meaning: "khó" },
-            { word: "太太", pinyin: "taitai", meaning: "bà" },
-            { word: "秘书", pinyin: "mishu", meaning: "thư ký" },
-            { word: "经理", pinyin: "jingli", meaning: "giám đốc" },
-            { word: "办公室", pinyin: "bangongshi", meaning: "văn phòng" },
-            { word: "辆", pinyin: "liang", meaning: "chiếc" },
-            { word: "楼", pinyin: "lou", meaning: "tòa nhà, tầng" },
-            { word: "拿", pinyin: "na", meaning: "cầm, lấy" },
-            { word: "把", pinyin: "ba", meaning: "con, cây" },
-            { word: "伞", pinyin: "san", meaning: "cái ô" },
-            { word: "胖", pinyin: "pang", meaning: "béo" },
-            { word: "其实", pinyin: "qishi", meaning: "thật ra" },
-            { word: "瘦", pinyin: "shou", meaning: "gầy" },
-            { word: "在", pinyin: "zai", meaning: "đang" },
-            { word: "出来", pinyin: "chulai", meaning: "ra ngoài" },
-            { word: "来", pinyin: "lai", meaning: "đến" },
-            { word: "正在", pinyin: "zhengzai", meaning: "đang" },
-            { word: "音乐", pinyin: "yinyue", meaning: "âm nhạc" },
-            { word: "没有", pinyin: "meiyou", meaning: "không có" },
-            { word: "正", pinyin: "zheng", meaning: "đang" },
-            { word: "录音", pinyin: "luyin", meaning: "ghi âm" },
-            { word: "书店", pinyin: "shudian", meaning: "tiệm sách" },
-            { word: "想", pinyin: "xiang", meaning: "nghĩ, muốn" },
-            { word: "汉英", pinyin: "hanying", meaning: "Trung-Anh" },
-            { word: "坐", pinyin: "zuo", meaning: "ngồi" },
-            { word: "挤", pinyin: "ji", meaning: "chúc, chen" },
-            { word: "骑", pinyin: "qi", meaning: "cưỡi ngựa, đi xe" },
-            { word: "行", pinyin: "xing", meaning: "được" },
-            { word: "门", pinyin: "men", meaning: "môn học" },
-            { word: "课", pinyin: "ke", meaning: "bài" },
-            { word: "综合", pinyin: "zonghe", meaning: "tổng hợp" },
-            { word: "口语", pinyin: "kouyu", meaning: "khẩu ngữ" },
-            { word: "听力", pinyin: "tingli", meaning: "môn nghe" },
-            { word: "阅读", pinyin: "yuedu", meaning: "môn đọc" },
-            { word: "文化", pinyin: "wenhua", meaning: "văn hóa" },
-            { word: "体育", pinyin: "tiyu", meaning: "thể dục" },
-            { word: "教", pinyin: "jiao", meaning: "dạy" }
+            { word: "腿", pinyin: "tui", meaning: "chân" }, { word: "疼", pinyin: "teng", meaning: "đau, nhức" }, { word: "脚", pinyin: "jiao", meaning: "bàn chân" }, { word: "树", pinyin: "shu", meaning: "cây" }, { word: "容易", pinyin: "rongyi", meaning: "dễ dàng" }, { word: "难", pinyin: "nan", meaning: "khó" }, { word: "太太", pinyin: "taitai", meaning: "bà" }, { word: "秘书", pinyin: "mishu", meaning: "thư ký" }, { word: "经理", pinyin: "jingli", meaning: "giám đốc" }, { word: "办公室", pinyin: "bangongshi", meaning: "văn phòng" }, { word: "辆", pinyin: "liang", meaning: "chiếc" }, { word: "楼", pinyin: "lou", meaning: "tòa nhà, tầng" }, { word: "拿", pinyin: "na", meaning: "cầm, lấy" }, { word: "把", pinyin: "ba", meaning: "con, cây" }, { word: "伞", pinyin: "san", meaning: "cái ô" }, { word: "胖", pinyin: "pang", meaning: "béo" }, { word: "其实", pinyin: "qishi", meaning: "thật ra" }, { word: "瘦", pinyin: "shou", meaning: "gầy" }, { word: "在", pinyin: "zai", meaning: "đang" }, { word: "出来", pinyin: "chulai", meaning: "ra ngoài" }, { word: "来", pinyin: "lai", meaning: "đến" }, { word: "正在", pinyin: "zhengzai", meaning: "đang" }, { word: "音乐", pinyin: "yinyue", meaning: "âm nhạc" }, { word: "没有", pinyin: "meiyou", meaning: "không có" }, { word: "正", pinyin: "zheng", meaning: "đang" }, { word: "录音", pinyin: "luyin", meaning: "ghi âm" }, { word: "书店", pinyin: "shudian", meaning: "tiệm sách" }, { word: "想", pinyin: "xiang", meaning: "nghĩ, muốn" }, { word: "汉英", pinyin: "hanying", meaning: "Trung-Anh" }, { word: "坐", pinyin: "zuo", meaning: "ngồi" }, { word: "挤", pinyin: "ji", meaning: "chúc, chen" }, { word: "骑", pinyin: "qi", meaning: "cưỡi ngựa, đi xe" }, { word: "行", pinyin: "xing", meaning: "được" }, { word: "门", pinyin: "men", meaning: "môn học" }, { word: "课", pinyin: "ke", meaning: "bài" }, { word: "综合", pinyin: "zonghe", meaning: "tổng hợp" }, { word: "口语", pinyin: "kouyu", meaning: "khẩu ngữ" }, { word: "听力", pinyin: "tingli", meaning: "môn nghe" }, { word: "阅读", pinyin: "yuedu", meaning: "môn đọc" }, { word: "文化", pinyin: "wenhua", meaning: "văn hóa" }, { word: "体育", pinyin: "tiyu", meaning: "thể dục" }, { word: "教", pinyin: "jiao", meaning: "dạy" }
         ],
         "3": [
-            { word: "还是", pinyin: "haishi", meaning: "hay là" },
-            { word: "爬山", pinyin: "pashan", meaning: "leo núi" },
-            { word: "小心", pinyin: "xiaoxin", meaning: "cẩn thận" },
-            { word: "条", pinyin: "tiao", meaning: "cái" },
-            { word: "裤子", pinyin: "kuzi", meaning: "quần" },
-            { word: "记得", pinyin: "jide", meaning: "còn nhớ" },
-            { word: "衬衫", pinyin: "chenshan", meaning: "áo sơ mi" },
-            { word: "元", pinyin: "yuan", meaning: "đồng" },
-            { word: "新鲜", pinyin: "xinxian", meaning: "tươi" },
-            { word: "甜", pinyin: "tian", meaning: "ngọt" },
-            { word: "只", pinyin: "zhi", meaning: "chỉ" },
-            { word: "放", pinyin: "fang", meaning: "đặt, để" },
-            { word: "饮料", pinyin: "yinliao", meaning: "đồ uống" },
-            { word: "或者", pinyin: "huozhe", meaning: "hoặc" },
-            { word: "舒服", pinyin: "shufu", meaning: "thoải mái" },
-            { word: "花", pinyin: "hua", meaning: "hoa" },
-            { word: "绿", pinyin: "lv", meaning: "màu xanh lục" },
-            { word: "包裹", pinyin: "baoguo", meaning: "bưu kiện" },
-            { word: "顺便", pinyin: "shunbian", meaning: "nhân tiện" },
-            { word: "替", pinyin: "ti", meaning: "thay thế" },
-            { word: "邮票", pinyin: "youpiao", meaning: "tem" },
-            { word: "份", pinyin: "fen", meaning: "phần" },
-            { word: "报纸", pinyin: "baozhi", meaning: "báo chí" },
-            { word: "报", pinyin: "bao", meaning: "báo" },
-            { word: "不用", pinyin: "buyong", meaning: "không cần" },
-            { word: "青年", pinyin: "qingnian", meaning: "thanh niên" },
-            { word: "旅行", pinyin: "lvxing", meaning: "du lịch" },
-            { word: "代表", pinyin: "daibiao", meaning: "đại biểu" },
-            { word: "团", pinyin: "tuan", meaning: "đoàn" },
-            { word: "当", pinyin: "dang", meaning: "làm" },
-            { word: "翻译", pinyin: "fanyi", meaning: "phiên dịch" },
-            { word: "飞机", pinyin: "feiji", meaning: "máy bay" },
-            { word: "飞", pinyin: "fei", meaning: "bay" },
-            { word: "火车", pinyin: "huoche", meaning: "tàu hỏa" },
-            { word: "回来", pinyin: "huilai", meaning: "trở về" },
-            { word: "办", pinyin: "ban", meaning: "làm" },
-            { word: "帮", pinyin: "bang", meaning: "giúp đỡ" },
-            { word: "浇", pinyin: "jiao", meaning: "tưới" },
-            { word: "没问题", pinyin: "meiwenti", meaning: "không vấn đề" },
-            { word: "问题", pinyin: "wenti", meaning: "vấn đề" },
-            { word: "上海", pinyin: "shanghai", meaning: "Thượng Hải" },
-            { word: "珍妮", pinyin: "zhenni", meaning: "Janet" }
+            { word: "还是", pinyin: "haishi", meaning: "hay là" }, { word: "爬山", pinyin: "pashan", meaning: "leo núi" }, { word: "小心", pinyin: "xiaoxin", meaning: "cẩn thận" }, { word: "条", pinyin: "tiao", meaning: "cái" }, { word: "裤子", pinyin: "kuzi", meaning: "quần" }, { word: "记得", pinyin: "jide", meaning: "còn nhớ" }, { word: "衬衫", pinyin: "chenshan", meaning: "áo sơ mi" }, { word: "元", pinyin: "yuan", meaning: "đồng" }, { word: "新鲜", pinyin: "xinxian", meaning: "tươi" }, { word: "甜", pinyin: "tian", meaning: "ngọt" }, { word: "只", pinyin: "zhi", meaning: "chỉ" }, { word: "放", pinyin: "fang", meaning: "đặt, để" }, { word: "饮料", pinyin: "yinliao", meaning: "đồ uống" }, { word: "或者", pinyin: "huozhe", meaning: "hoặc" }, { word: "舒服", pinyin: "shufu", meaning: "thoải mái" }, { word: "花", pinyin: "hua", meaning: "hoa" }, { word: "绿", pinyin: "lv", meaning: "màu xanh lục" }, { word: "包裹", pinyin: "baoguo", meaning: "bưu kiện" }, { word: "顺便", pinyin: "shunbian", meaning: "nhân tiện" }, { word: "替", pinyin: "ti", meaning: "thay thế" }, { word: "邮票", pinyin: "youpiao", meaning: "tem" }, { word: "份", pinyin: "fen", meaning: "phần" }, { word: "报纸", pinyin: "baozhi", meaning: "báo chí" }, { word: "报", pinyin: "bao", meaning: "báo" }, { word: "不用", pinyin: "buyong", meaning: "không cần" }, { word: "青年", pinyin: "qingnian", meaning: "thanh niên" }, { word: "旅行", pinyin: "lvxing", meaning: "du lịch" }, { word: "代表", pinyin: "daibiao", meaning: "đại biểu" }, { word: "团", pinyin: "tuan", meaning: "đoàn" }, { word: "当", pinyin: "dang", meaning: "làm" }, { word: "翻译", pinyin: "fanyi", meaning: "phiên dịch" }, { word: "飞机", pinyin: "feiji", meaning: "máy bay" }, { word: "飞", pinyin: "fei", meaning: "bay" }, { word: "火车", pinyin: "huoche", meaning: "tàu hỏa" }, { word: "回来", pinyin: "huilai", meaning: "trở về" }, { word: "办", pinyin: "ban", meaning: "làm" }, { word: "帮", pinyin: "bang", meaning: "giúp đỡ" }, { word: "浇", pinyin: "jiao", meaning: "tưới" }, { word: "没问题", pinyin: "meiwenti", meaning: "không vấn đề" }, { word: "问题", pinyin: "wenti", meaning: "vấn đề" }, { word: "上海", pinyin: "shanghai", meaning: "Thượng Hải" }, { word: "珍妮", pinyin: "zhenni", meaning: "Janet" }
         ],
         "4": [
-            { word: "比赛", pinyin: "bisai", meaning: "cuộc thi đấu" },
-            { word: "照片", pinyin: "zhaopian", meaning: "bức ảnh" },
-            { word: "年级", pinyin: "nianji", meaning: "lớp" },
-            { word: "又", pinyin: "you", meaning: "vừa" },
-            { word: "聪明", pinyin: "congming", meaning: "thông minh" },
-            { word: "热情", pinyin: "reqing", meaning: "nhiệt tình" },
-            { word: "努力", pinyin: "nuli", meaning: "nỗ lực" },
-            { word: "总是", pinyin: "zongshi", meaning: "luôn luôn" },
-            { word: "回答", pinyin: "huida", meaning: "trả lời" },
-            { word: "站", pinyin: "zhan", meaning: "đứng" },
-            { word: "饿", pinyin: "e", meaning: "đói" },
-            { word: "蛋糕", pinyin: "dangao", meaning: "bánh kem" },
-            { word: "超市", pinyin: "chaoshi", meaning: "siêu thị" },
-            { word: "年轻", pinyin: "nianqing", meaning: "trẻ tuổi" },
-            { word: "认真", pinyin: "renzhen", meaning: "nghiêm túc" },
-            { word: "客人", pinyin: "keren", meaning: "khách hàng" },
-            { word: "羽绒服", pinyin: "yurongfu", meaning: "đồ nhung" },
-            { word: "便宜", pinyin: "pianyi", meaning: "rẻ" },
-            { word: "长", pinyin: "chang", meaning: "dài" },
-            { word: "一点儿", pinyin: "yidianr", meaning: "một chút" },
-            { word: "短", pinyin: "duan", meaning: "ngắn" },
-            { word: "深", pinyin: "shen", meaning: "đậm" },
-            { word: "试", pinyin: "shi", meaning: "thử" },
-            { word: "浅", pinyin: "qian", meaning: "nhạt" },
-            { word: "可以", pinyin: "keyi", meaning: "có thể" },
-            { word: "当然", pinyin: "dangran", meaning: "đương nhiên" },
-            { word: "肥", pinyin: "fei", meaning: "rộng" },
-            { word: "合适", pinyin: "heshi", meaning: "thích hợp" },
-            { word: "好看", pinyin: "haokan", meaning: "đẹp" },
-            { word: "种", pinyin: "zhong", meaning: "loại" },
-            { word: "打折", pinyin: "dazhe", meaning: "chiết khấu" }
+            { word: "比赛", pinyin: "bisai", meaning: "cuộc thi đấu" }, { word: "照片", pinyin: "zhaopian", meaning: "bức ảnh" }, { word: "年级", pinyin: "nianji", meaning: "lớp" }, { word: "又", pinyin: "you", meaning: "vừa" }, { word: "聪明", pinyin: "congming", meaning: "thông minh" }, { word: "热情", pinyin: "reqing", meaning: "nhiệt tình" }, { word: "努力", pinyin: "nuli", meaning: "nỗ lực" }, { word: "总是", pinyin: "zongshi", meaning: "luôn luôn" }, { word: "回答", pinyin: "huida", meaning: "trả lời" }, { word: "站", pinyin: "zhan", meaning: "đứng" }, { word: "饿", pinyin: "e", meaning: "đói" }, { word: "蛋糕", pinyin: "dangao", meaning: "bánh kem" }, { word: "超市", pinyin: "chaoshi", meaning: "siêu thị" }, { word: "年轻", pinyin: "nianqing", meaning: "trẻ tuổi" }, { word: "认真", pinyin: "renzhen", meaning: "nghiêm túc" }, { word: "客人", pinyin: "keren", meaning: "khách hàng" }, { word: "羽绒服", pinyin: "yurongfu", meaning: "đồ nhung" }, { word: "便宜", pinyin: "pianyi", meaning: "rẻ" }, { word: "长", pinyin: "chang", meaning: "dài" }, { word: "一点儿", pinyin: "yidianr", meaning: "một chút" }, { word: "短", pinyin: "duan", meaning: "ngắn" }, { word: "深", pinyin: "shen", meaning: "đậm" }, { word: "试", pinyin: "shi", meaning: "thử" }, { word: "浅", pinyin: "qian", meaning: "nhạt" }, { word: "可以", pinyin: "keyi", meaning: "có thể" }, { word: "当然", pinyin: "dangran", meaning: "đương nhiên" }, { word: "肥", pinyin: "fei", meaning: "rộng" }, { word: "合适", pinyin: "heshi", meaning: "thích hợp" }, { word: "好看", pinyin: "haokan", meaning: "đẹp" }, { word: "种", pinyin: "zhong", meaning: "loại" }, { word: "打折", pinyin: "dazhe", meaning: "chiết khấu" }
         ],
         "5": [
-            { word: "发烧", pinyin: "fashao", meaning: "sốt" },
-            { word: "为", pinyin: "wei", meaning: "cho" },
-            { word: "照顾", pinyin: "zhaogu", meaning: "chăm sóc" },
-            { word: "用", pinyin: "yong", meaning: "cần" },
-            { word: "感冒", pinyin: "ganmao", meaning: "bị cảm" },
-            { word: "季节", pinyin: "jijie", meaning: "mùa" },
-            { word: "春天", pinyin: "chuntian", meaning: "mùa xuân" },
-            { word: "草", pinyin: "cao", meaning: "cỏ" },
-            { word: "夏天", pinyin: "xiatian", meaning: "mùa hạ" },
-            { word: "裙子", pinyin: "qunzi", meaning: "váy" },
-            { word: "最近", pinyin: "zuijin", meaning: "gần đây" },
-            { word: "越", pinyin: "yue", meaning: "càng" },
-            { word: "年", pinyin: "nian", meaning: "năm" },
-            { word: "今年", pinyin: "jinnian", meaning: "năm nay" },
-            { word: "明天", pinyin: "mingtian", meaning: "năm sau" },
-            { word: "去年", pinyin: "qunian", meaning: "năm ngoái" },
-            { word: "后年", pinyin: "hounian", meaning: "năm sau nữa" },
-            { word: "毕业", pinyin: "biye", meaning: "tốt nghiệp" },
-            { word: "多", pinyin: "duo", meaning: "bao nhiêu" },
-            { word: "岁", pinyin: "sui", meaning: "tuổi" },
-            { word: "属", pinyin: "shu", meaning: "cầm tinh" },
-            { word: "狗", pinyin: "gou", meaning: "con chó" },
-            { word: "月", pinyin: "yue", meaning: "tháng" },
-            { word: "号", pinyin: "hao", meaning: "ngày" },
-            { word: "生日", pinyin: "shengri", meaning: "sinh nhật" },
-            { word: "正好", pinyin: "zhenghao", meaning: "vừa hay" },
-            { word: "过", pinyin: "guo", meaning: "trải qua" },
-            { word: "准备", pinyin: "zhunbei", meaning: "chuẩn bị" },
-            { word: "举行", pinyin: "juxing", meaning: "cử hành" },
-            { word: "晚会", pinyin: "wanhui", meaning: "buổi liên hoan" },
-            { word: "参加", pinyin: "canjia", meaning: "tham gia" },
-            { word: "时间", pinyin: "shijian", meaning: "thời gian" },
-            { word: "就", pinyin: "jiu", meaning: "thì, bèn" },
-            { word: "快乐", pinyin: "kuaile", meaning: "vui vẻ" },
-            { word: "祝你生日快乐", pinyin: "zhu ni shengri kuaile", meaning: "chúc bạn sinh nhật vui vẻ" }
+            { word: "发烧", pinyin: "fashao", meaning: "sốt" }, { word: "为", pinyin: "wei", meaning: "cho" }, { word: "照顾", pinyin: "zhaogu", meaning: "chăm sóc" }, { word: "用", pinyin: "yong", meaning: "cần" }, { word: "感冒", pinyin: "ganmao", meaning: "bị cảm" }, { word: "季节", pinyin: "jijie", meaning: "mùa" }, { word: "春天", pinyin: "chuntian", meaning: "mùa xuân" }, { word: "草", pinyin: "cao", meaning: "cỏ" }, { word: "夏天", pinyin: "xiatian", meaning: "mùa hạ" }, { word: "裙子", pinyin: "qunzi", meaning: "váy" }, { word: "最近", pinyin: "zuijin", meaning: "gần đây" }, { word: "越", pinyin: "yue", meaning: "càng" }, { word: "年", pinyin: "nian", meaning: "năm" }, { word: "今年", pinyin: "jinnian", meaning: "năm nay" }, { word: "明天", pinyin: "mingtian", meaning: "năm sau" }, { word: "去年", pinyin: "qunian", meaning: "năm ngoái" }, { word: "后年", pinyin: "hounian", meaning: "năm sau nữa" }, { word: "毕业", pinyin: "biye", meaning: "tốt nghiệp" }, { word: "多", pinyin: "duo", meaning: "bao nhiêu" }, { word: "岁", pinyin: "sui", meaning: "tuổi" }, { word: "属", pinyin: "shu", meaning: "cầm tinh" }, { word: "狗", pinyin: "gou", meaning: "con chó" }, { word: "月", pinyin: "yue", meaning: "tháng" }, { word: "号", pinyin: "hao", meaning: "ngày" }, { word: "生日", pinyin: "shengri", meaning: "sinh nhật" }, { word: "正好", pinyin: "zhenghao", meaning: "vừa hay" }, { word: "过", pinyin: "guo", meaning: "trải qua" }, { word: "准备", pinyin: "zhunbei", meaning: "chuẩn bị" }, { word: "举行", pinyin: "juxing", meaning: "cử hành" }, { word: "晚会", pinyin: "wanhui", meaning: "buổi liên hoan" }, { word: "参加", pinyin: "canjia", meaning: "tham gia" }, { word: "时间", pinyin: "shijian", meaning: "thời gian" }, { word: "就", pinyin: "jiu", meaning: "thì, bèn" }, { word: "快乐", pinyin: "kuaile", meaning: "vui vẻ" }, { word: "祝你生日快乐", pinyin: "zhu ni shengri kuaile", meaning: "chúc bạn sinh nhật vui vẻ" }
         ],
         "6": [
-            { word: "眼镜", pinyin: "yanjing", meaning: "mắt kính" },
-            { word: "突然", pinyin: "turan", meaning: "bỗng nhiên" },
-            { word: "离开", pinyin: "likai", meaning: "rời khỏi" },
-            { word: "清楚", pinyin: "qingchu", meaning: "rõ ràng" },
-            { word: "刚才", pinyin: "gangcai", meaning: "vừa nãy" },
-            { word: "帮忙", pinyin: "bangmang", meaning: "giúp đỡ" },
-            { word: "特别", pinyin: "tebie", meaning: "vô cùng, rất" },
-            { word: "讲", pinyin: "jiang", meaning: "giảng, nói" },
-            { word: "明白", pinyin: "mingbai", meaning: "rõ ràng, dễ hiểu" },
-            { word: "锻炼", pinyin: "duanlian", meaning: "tập thể dục" },
-            { word: "音乐", pinyin: "yinyue", meaning: "âm nhạc" },
-            { word: "公园", pinyin: "gongyuan", meaning: "công viên" },
-            { word: "聊天儿", pinyin: "liaotianr", meaning: "tán gẫu" },
-            { word: "睡着", pinyin: "shuizhao", meaning: "ngủ được" },
-            { word: "更", pinyin: "geng", meaning: "càng" },
-            { word: "每", pinyin: "mei", meaning: "mỗi" },
-            { word: "早上", pinyin: "zaoshang", meaning: "sáng sớm" },
-            { word: "半", pinyin: "ban", meaning: "rưỡi" },
-            { word: "起床", pinyin: "qichuang", meaning: "thức dậy" },
-            { word: "床", pinyin: "chuang", meaning: "giường" },
-            { word: "早饭", pinyin: "zaofan", meaning: "cơm sáng" },
-            { word: "午饭", pinyin: "wufan", meaning: "cơm trưa" },
-            { word: "晚饭", pinyin: "wanfan", meaning: "cơm tối" },
-            { word: "以后", pinyin: "yihou", meaning: "sau này" },
-            { word: "差", pinyin: "cha", meaning: "kém" },
-            { word: "分钟", pinyin: "fenzhong", meaning: "phút" },
-            { word: "上课", pinyin: "shangke", meaning: "lên lớp" },
-            { word: "节", pinyin: "jie", meaning: "tiết" },
-            { word: "教室", pinyin: "jiaoshi", meaning: "lớp học" },
-            { word: "操场", pinyin: "caochang", meaning: "sân vận động" },
-            { word: "洗", pinyin: "xi", meaning: "rửa" },
-            { word: "洗澡", pinyin: "xizao", meaning: "tắm" },
-            { word: "然后", pinyin: "ranhou", meaning: "sau đó" },
-            { word: "爬", pinyin: "pa", meaning: "leo, trèo" },
-            { word: "山", pinyin: "shan", meaning: "núi" },
-            { word: "出发", pinyin: "chufa", meaning: "xuất phát" },
-            { word: "前", pinyin: "qian", meaning: "trước" },
-            { word: "集合", pinyin: "jihe", meaning: "tập hợp" },
-            { word: "上车", pinyin: "shangche", meaning: "lên xe" },
-            { word: "下车", pinyin: "xiache", meaning: "xuống xe" },
-            { word: "准时", pinyin: "zhunshi", meaning: "đúng giờ" }
+            { word: "眼镜", pinyin: "yanjing", meaning: "mắt kính" }, { word: "突然", pinyin: "turan", meaning: "bỗng nhiên" }, { word: "离开", pinyin: "likai", meaning: "rời khỏi" }, { word: "清楚", pinyin: "qingchu", meaning: "rõ ràng" }, { word: "刚才", pinyin: "gangcai", meaning: "vừa nãy" }, { word: "帮忙", pinyin: "bangmang", meaning: "giúp đỡ" }, { word: "特别", pinyin: "tebie", meaning: "vô cùng, rất" }, { word: "讲", pinyin: "jiang", meaning: "giảng, nói" }, { word: "明白", pinyin: "mingbai", meaning: "rõ ràng, dễ hiểu" }, { word: "锻炼", pinyin: "duanlian", meaning: "tập thể dục" }, { word: "音乐", pinyin: "yinyue", meaning: "âm nhạc" }, { word: "公园", pinyin: "gongyuan", meaning: "công viên" }, { word: "聊天儿", pinyin: "liaotianr", meaning: "tán gẫu" }, { word: "睡着", pinyin: "shuizhao", meaning: "ngủ được" }, { word: "更", pinyin: "geng", meaning: "càng" }, { word: "每", pinyin: "mei", meaning: "mỗi" }, { word: "早上", pinyin: "zaoshang", meaning: "sáng sớm" }, { word: "半", pinyin: "ban", meaning: "rưỡi" }, { word: "起床", pinyin: "qichuang", meaning: "thức dậy" }, { word: "床", pinyin: "chuang", meaning: "giường" }, { word: "早饭", pinyin: "zaofan", meaning: "cơm sáng" }, { word: "午饭", pinyin: "wufan", meaning: "cơm trưa" }, { word: "晚饭", pinyin: "wanfan", meaning: "cơm tối" }, { word: "以后", pinyin: "yihou", meaning: "sau này" }, { word: "差", pinyin: "cha", meaning: "kém" }, { word: "分钟", pinyin: "fenzhong", meaning: "phút" }, { word: "上课", pinyin: "shangke", meaning: "lên lớp" }, { word: "节", pinyin: "jie", meaning: "tiết" }, { word: "教室", pinyin: "jiaoshi", meaning: "lớp học" }, { word: "操场", pinyin: "caochang", meaning: "sân vận động" }, { word: "洗", pinyin: "xi", meaning: "rửa" }, { word: "洗澡", pinyin: "xizao", meaning: "tắm" }, { word: "然后", pinyin: "ranhou", meaning: "sau đó" }, { word: "爬", pinyin: "pa", meaning: "leo, trèo" }, { word: "山", pinyin: "shan", meaning: "núi" }, { word: "出发", pinyin: "chufa", meaning: "xuất phát" }, { word: "前", pinyin: "qian", meaning: "trước" }, { word: "集合", pinyin: "jihe", meaning: "tập hợp" }, { word: "上车", pinyin: "shangche", meaning: "lên xe" }, { word: "下车", pinyin: "xiache", meaning: "xuống xe" }, { word: "准时", pinyin: "zhunshi", meaning: "đúng giờ" }
         ],
         "7": [
-            { word: "同事", pinyin: "tongshi", meaning: "đồng nghiệp" },
-            { word: "以前", pinyin: "yiqian", meaning: "trước đây" },
-            { word: "银行", pinyin: "yinhang", meaning: "ngân hàng" },
-            { word: "久", pinyin: "jiu", meaning: "lâu" },
-            { word: "感兴趣", pinyin: "ganxingqu", meaning: "có hứng thú" },
-            { word: "结婚", pinyin: "jiehun", meaning: "kết hôn" },
-            { word: "欢迎", pinyin: "huanying", meaning: "hoan nghênh" },
-            { word: "迟到", pinyin: "chidao", meaning: "đến muộn" },
-            { word: "半", pinyin: "ban", meaning: "nửa, rưỡi" },
-            { word: "接", pinyin: "jie", meaning: "đón tiếp" },
-            { word: "刻", pinyin: "ke", meaning: "15 phút" },
-            { word: "差", pinyin: "cha", meaning: "kém" },
-            { word: "叫", pinyin: "jiao", meaning: "kêu, gọi" },
-            { word: "让", pinyin: "rang", meaning: "để, để cho" },
-            { word: "大家", pinyin: "dajia", meaning: "mọi người" },
-            { word: "谈", pinyin: "tan", meaning: "nói chuyện" },
-            { word: "自己", pinyin: "ziji", meaning: "bản thân" },
-            { word: "爱好", pinyin: "aihao", meaning: "sở thích" },
-            { word: "京剧", pinyin: "jingju", meaning: "Kinh kịch" },
-            { word: "喜欢", pinyin: "xihuan", meaning: "thích" },
-            { word: "非常", pinyin: "feichang", meaning: "vô cùng" },
-            { word: "唱", pinyin: "chang", meaning: "hát" },
-            { word: "玩", pinyin: "wan", meaning: "chơi" },
-            { word: "电脑", pinyin: "diannao", meaning: "máy tính" },
-            { word: "感到", pinyin: "gandao", meaning: "cảm thấy" },
-            { word: "心情", pinyin: "xinqing", meaning: "tâm tình" },
-            { word: "愉快", pinyin: "yukuai", meaning: "vui vẻ" },
-            { word: "业余", pinyin: "yeyu", meaning: "nghiệp dư" },
-            { word: "以前", pinyin: "yiqian", meaning: "trước đây" },
-            { word: "对", pinyin: "dui", meaning: "đối với" },
-            { word: "书法", pinyin: "shufa", meaning: "thư pháp" },
-            { word: "派", pinyin: "pai", meaning: "phái, cử" },
-            { word: "高兴", pinyin: "gaoxing", meaning: "vui vẻ" },
-            { word: "画", pinyin: "hua", meaning: "vẽ" },
-            { word: "画儿", pinyin: "huar", meaning: "tranh vẽ" }
+            { word: "同事", pinyin: "tongshi", meaning: "đồng nghiệp" }, { word: "以前", pinyin: "yiqian", meaning: "trước đây" }, { word: "银行", pinyin: "yinhang", meaning: "ngân hàng" }, { word: "久", pinyin: "jiu", meaning: "lâu" }, { word: "感兴趣", pinyin: "ganxingqu", meaning: "có hứng thú" }, { word: "结婚", pinyin: "jiehun", meaning: "kết hôn" }, { word: "欢迎", pinyin: "huanying", meaning: "hoan nghênh" }, { word: "迟到", pinyin: "chidao", meaning: "đến muộn" }, { word: "半", pinyin: "ban", meaning: "nửa, rưỡi" }, { word: "接", pinyin: "jie", meaning: "đón tiếp" }, { word: "刻", pinyin: "ke", meaning: "15 phút" }, { word: "差", pinyin: "cha", meaning: "kém" }, { word: "叫", pinyin: "jiao", meaning: "kêu, gọi" }, { word: "让", pinyin: "rang", meaning: "để, để cho" }, { word: "大家", pinyin: "dajia", meaning: "mọi người" }, { word: "谈", pinyin: "tan", meaning: "nói chuyện" }, { word: "自己", pinyin: "ziji", meaning: "bản thân" }, { word: "爱好", pinyin: "aihao", meaning: "sở thích" }, { word: "京剧", pinyin: "jingju", meaning: "Kinh kịch" }, { word: "喜欢", pinyin: "xihuan", meaning: "thích" }, { word: "非常", pinyin: "feichang", meaning: "vô cùng" }, { word: "唱", pinyin: "chang", meaning: "hát" }, { word: "玩", pinyin: "wan", meaning: "chơi" }, { word: "电脑", pinyin: "diannao", meaning: "máy tính" }, { word: "感到", pinyin: "gandao", meaning: "cảm thấy" }, { word: "心情", pinyin: "xinqing", meaning: "tâm tình" }, { word: "愉快", pinyin: "yukuai", meaning: "vui vẻ" }, { word: "业余", pinyin: "yeyu", meaning: "nghiệp dư" }, { word: "以前", pinyin: "yiqian", meaning: "trước đây" }, { word: "对", pinyin: "dui", meaning: "đối với" }, { word: "书法", pinyin: "shufa", meaning: "thư pháp" }, { word: "派", pinyin: "pai", meaning: "phái, cử" }, { word: "高兴", pinyin: "gaoxing", meaning: "vui vẻ" }, { word: "画", pinyin: "hua", meaning: "vẽ" }, { word: "画儿", pinyin: "huar", meaning: "tranh vẽ" }
         ],
         "8": [
-            { word: "满意", pinyin: "manyi", meaning: "hài lòng" },
-            { word: "电梯", pinyin: "dianti", meaning: "thang máy" },
-            { word: "层", pinyin: "ceng", meaning: "từng" },
-            { word: "害怕", pinyin: "haipa", meaning: "sợ hãi" },
-            { word: "熊猫", pinyin: "xiongmao", meaning: "gấu trúc" },
-            { word: "见面", pinyin: "jianmian", meaning: "gặp mặt" },
-            { word: "安静", pinyin: "anjing", meaning: "yên tĩnh" },
-            { word: "一会儿", pinyin: "yihuir", meaning: "một lát" },
-            { word: "马上", pinyin: "mashang", meaning: "lập tức" },
-            { word: "洗手间", pinyin: "xishoujian", meaning: "nhà vệ sinh" },
-            { word: "老", pinyin: "lao", meaning: "già, cũ" },
-            { word: "几乎", pinyin: "jihu", meaning: "gần như" },
-            { word: "变化", pinyin: "bianhua", meaning: "thay đổi" },
-            { word: "健康", pinyin: "jiankang", meaning: "khỏe mạnh" },
-            { word: "重要", pinyin: "zhongyao", meaning: "quan trọng" },
-            { word: "可乐", pinyin: "kele", meaning: "coca-cola" },
-            { word: "边", pinyin: "bian", meaning: "bên, phía" },
-            { word: "东边", pinyin: "dongbian", meaning: "phía Đông" },
-            { word: "西边", pinyin: "xibian", meaning: "phía Tây" },
-            { word: "南边", pinyin: "nanbian", meaning: "phía Nam" },
-            { word: "北边", pinyin: "beibian", meaning: "phía Bắc" },
-            { word: "前边", pinyin: "qianbian", meaning: "phía trước" },
-            { word: "后边", pinyin: "houbian", meaning: "phía sau" },
-            { word: "左边", pinyin: "zuobian", meaning: "bên trái" },
-            { word: "右边", pinyin: "youbian", meaning: "bên phải" },
-            { word: "里边", pinyin: "libian", meaning: "phía trong" },
-            { word: "外边", pinyin: "waibian", meaning: "phía ngoài" },
-            { word: "上边", pinyin: "shangbian", meaning: "phía trên" },
-            { word: "下边", pinyin: "xiabian", meaning: "phía dưới" },
-            { word: "离", pinyin: "li", meaning: "cách" },
-            { word: "远", pinyin: "yuan", meaning: "xa" },
-            { word: "近", pinyin: "jin", meaning: "gần" },
-            { word: "地方", pinyin: "difang", meaning: "địa phương, nơi" },
-            { word: "足球场", pinyin: "zuqiuchang", meaning: "sân bóng đá" },
-            { word: "足球", pinyin: "zuqiu", meaning: "bóng đá" },
-            { word: "劳驾", pinyin: "laojia", meaning: "cảm phiền" },
-            { word: "打听", pinyin: "dating", meaning: "nghe ngóng" },
-            { word: "博物馆", pinyin: "bowuguan", meaning: "bảo tàng" },
-            { word: "和平", pinyin: "heping", meaning: "hòa bình" },
-            { word: "广场", pinyin: "guangchang", meaning: "quảng trường" },
-            { word: "中间", pinyin: "zhongjian", meaning: "giữa" },
-            { word: "从", pinyin: "cong", meaning: "từ" },
-            { word: "到", pinyin: "dao", meaning: "đến" },
-            { word: "红绿灯", pinyin: "honglvdeng", meaning: "đèn giao thông" },
-            { word: "灯", pinyin: "deng", meaning: "đèn" },
-            { word: "往", pinyin: "wang", meaning: "về phía" },
-            { word: "拐", pinyin: "guai", meaning: "quẹo, rẽ" },
-            { word: "马路", pinyin: "malu", meaning: "đường cái" },
-            { word: "路", pinyin: "lu", meaning: "đường" }
+            { word: "满意", pinyin: "manyi", meaning: "hài lòng" }, { word: "电梯", pinyin: "dianti", meaning: "thang máy" }, { word: "层", pinyin: "ceng", meaning: "từng" }, { word: "害怕", pinyin: "haipa", meaning: "sợ hãi" }, { word: "熊猫", pinyin: "xiongmao", meaning: "gấu trúc" }, { word: "见面", pinyin: "jianmian", meaning: "gặp mặt" }, { word: "安静", pinyin: "anjing", meaning: "yên tĩnh" }, { word: "一会儿", pinyin: "yihuir", meaning: "một lát" }, { word: "马上", pinyin: "mashang", meaning: "lập tức" }, { word: "洗手间", pinyin: "xishoujian", meaning: "nhà vệ sinh" }, { word: "老", pinyin: "lao", meaning: "già, cũ" }, { word: "几乎", pinyin: "jihu", meaning: "gần như" }, { word: "变化", pinyin: "bianhua", meaning: "thay đổi" }, { word: "健康", pinyin: "jiankang", meaning: "khỏe mạnh" }, { word: "重要", pinyin: "zhongyao", meaning: "quan trọng" }, { word: "可乐", pinyin: "kele", meaning: "coca-cola" }, { word: "边", pinyin: "bian", meaning: "bên, phía" }, { word: "东边", pinyin: "dongbian", meaning: "phía Đông" }, { word: "西边", pinyin: "xibian", meaning: "phía Tây" }, { word: "南边", pinyin: "nanbian", meaning: "phía Nam" }, { word: "北边", pinyin: "beibian", meaning: "phía Bắc" }, { word: "前边", pinyin: "qianbian", meaning: "phía trước" }, { word: "后边", pinyin: "houbian", meaning: "phía sau" }, { word: "左边", pinyin: "zuobian", meaning: "bên trái" }, { word: "右边", pinyin: "youbian", meaning: "bên phải" }, { word: "里边", pinyin: "libian", meaning: "phía trong" }, { word: "外边", pinyin: "waibian", meaning: "phía ngoài" }, { word: "上边", pinyin: "shangbian", meaning: "phía trên" }, { word: "下边", pinyin: "xiabian", meaning: "phía dưới" }, { word: "离", pinyin: "li", meaning: "cách" }, { word: "远", pinyin: "yuan", meaning: "xa" }, { word: "近", pinyin: "jin", meaning: "gần" }, { word: "地方", pinyin: "difang", meaning: "địa phương, nơi" }, { word: "足球场", pinyin: "zuqiuchang", meaning: "sân bóng đá" }, { word: "足球", pinyin: "zuqiu", meaning: "bóng đá" }, { word: "劳驾", pinyin: "laojia", meaning: "cảm phiền" }, { word: "打听", pinyin: "dating", meaning: "nghe ngóng" }, { word: "博物馆", pinyin: "bowuguan", meaning: "bảo tàng" }, { word: "和平", pinyin: "heping", meaning: "hòa bình" }, { word: "广场", pinyin: "guangchang", meaning: "quảng trường" }, { word: "中间", pinyin: "zhongjian", meaning: "giữa" }, { word: "从", pinyin: "cong", meaning: "từ" }, { word: "到", pinyin: "dao", meaning: "đến" }, { word: "红绿灯", pinyin: "honglvdeng", meaning: "đèn giao thông" }, { word: "灯", pinyin: "deng", meaning: "đèn" }, { word: "往", pinyin: "wang", meaning: "về phía" }, { word: "拐", pinyin: "guai", meaning: "quẹo, rẽ" }, { word: "马路", pinyin: "malu", meaning: "đường cái" }, { word: "路", pinyin: "lu", meaning: "đường" }
         ],
         "9": [
-            { word: "中文", pinyin: "zhongwen", meaning: "tiếng Trung Quốc" },
-            { word: "班", pinyin: "ban", meaning: "lớp" },
-            { word: "一样", pinyin: "yiyang", meaning: "giống nhau" },
-            { word: "最后", pinyin: "zuihou", meaning: "cuối cùng" },
-            { word: "放心", pinyin: "fangxin", meaning: "yên tâm" },
-            { word: "一定", pinyin: "yiding", meaning: "nhất định" },
-            { word: "担心", pinyin: "danxin", meaning: "lo lắng" },
-            { word: "比较", pinyin: "bijiao", meaning: "tương đối" },
-            { word: "了解", pinyin: "liaojie", meaning: "hiểu rõ" },
-            { word: "先", pinyin: "xian", meaning: "trước tiên" },
-            { word: "中间", pinyin: "zhongjian", meaning: "giữa" },
-            { word: "参加", pinyin: "canjia", meaning: "tham gia" },
-            { word: "影响", pinyin: "yingxiang", meaning: "ảnh hưởng" },
-            { word: "会", pinyin: "hui", meaning: "có thể, sẽ, biết" },
-            { word: "打", pinyin: "da", meaning: "đánh, chơi" },
-            { word: "太极拳", pinyin: "taijiquan", meaning: "Thái cực quyền" },
-            { word: "听说", pinyin: "tingshuo", meaning: "nghe nói" },
-            { word: "报名", pinyin: "baoming", meaning: "báo danh" },
-            { word: "开始", pinyin: "kaishi", meaning: "bắt đầu" },
-            { word: "能", pinyin: "neng", meaning: "có thể" },
-            { word: "再", pinyin: "zai", meaning: "lại, nữa" },
-            { word: "遍", pinyin: "bian", meaning: "lần" },
-            { word: "懂", pinyin: "dong", meaning: "hiểu" },
-            { word: "舒服", pinyin: "shufu", meaning: "thoải mái" },
-            { word: "意思", pinyin: "yisi", meaning: "ý nghĩa" },
-            { word: "次", pinyin: "ci", meaning: "lần" },
-            { word: "小时", pinyin: "xiaoshi", meaning: "tiếng" },
-            { word: "请假", pinyin: "qingjia", meaning: "xin phép nghỉ" },
-            { word: "头疼", pinyin: "touteng", meaning: "đau đầu" },
-            { word: "疼", pinyin: "teng", meaning: "đau" },
-            { word: "咳嗽", pinyin: "kesou", meaning: "ho" },
-            { word: "看病", pinyin: "kanbing", meaning: "khám bệnh" },
-            { word: "病", pinyin: "bing", meaning: "bệnh" }
+            { word: "中文", pinyin: "zhongwen", meaning: "tiếng Trung Quốc" }, { word: "班", pinyin: "ban", meaning: "lớp" }, { word: "一样", pinyin: "yiyang", meaning: "giống nhau" }, { word: "最后", pinyin: "zuihou", meaning: "cuối cùng" }, { word: "放心", pinyin: "fangxin", meaning: "yên tâm" }, { word: "一定", pinyin: "yiding", meaning: "nhất định" }, { word: "担心", pinyin: "danxin", meaning: "lo lắng" }, { word: "比较", pinyin: "bijiao", meaning: "tương đối" }, { word: "了解", pinyin: "liaojie", meaning: "hiểu rõ" }, { word: "先", pinyin: "xian", meaning: "trước tiên" }, { word: "中间", pinyin: "zhongjian", meaning: "giữa" }, { word: "参加", pinyin: "canjia", meaning: "tham gia" }, { word: "影响", pinyin: "yingxiang", meaning: "ảnh hưởng" }, { word: "会", pinyin: "hui", meaning: "có thể, sẽ, biết" }, { word: "打", pinyin: "da", meaning: "đánh, chơi" }, { word: "太极拳", pinyin: "taijiquan", meaning: "Thái cực quyền" }, { word: "听说", pinyin: "tingshuo", meaning: "nghe nói" }, { word: "报名", pinyin: "baoming", meaning: "báo danh" }, { word: "开始", pinyin: "kaishi", meaning: "bắt đầu" }, { word: "能", pinyin: "neng", meaning: "có thể" }, { word: "再", pinyin: "zai", meaning: "lại, nữa" }, { word: "遍", pinyin: "bian", meaning: "lần" }, { word: "懂", pinyin: "dong", meaning: "hiểu" }, { word: "舒服", pinyin: "shufu", meaning: "thoải mái" }, { word: "意思", pinyin: "yisi", meaning: "ý nghĩa" }, { word: "次", pinyin: "ci", meaning: "lần" }, { word: "小时", pinyin: "xiaoshi", meaning: "tiếng" }, { word: "请假", pinyin: "qingjia", meaning: "xin phép nghỉ" }, { word: "头疼", pinyin: "touteng", meaning: "đau头" }, { word: "疼", pinyin: "teng", meaning: "đau" }, { word: "咳嗽", pinyin: "kesou", meaning: "ho" }, { word: "看病", pinyin: "kanbing", meaning: "khám bệnh" }, { word: "病", pinyin: "bing", meaning: "bệnh" }
         ],
         "10": [
-            { word: "个子", pinyin: "gezi", meaning: "vóc dáng" },
-            { word: "矮", pinyin: "ai", meaning: "thấp" },
-            { word: "历史", pinyin: "lishi", meaning: "Lịch sử" },
-            { word: "体育", pinyin: "tiyu", meaning: "Thể dục" },
-            { word: "数学", pinyin: "shuxue", meaning: "Toán" },
-            { word: "方便", pinyin: "fangbian", meaning: "thuận tiện" },
-            { word: "自行车", pinyin: "zixingche", meaning: "xe đạp" },
-            { word: "骑", pinyin: "qi", meaning: "cưỡi ngựa, đạp xe, lái xe" },
-            { word: "旧", pinyin: "jiu", meaning: "cũ" },
-            { word: "换", pinyin: "huan", meaning: "đổi" },
-            { word: "地方", pinyin: "difang", meaning: "nơi" },
-            { word: "中介", pinyin: "zhongjie", meaning: "môi giới" },
-            { word: "主要", pinyin: "zhuyao", meaning: "chủ yếu" },
-            { word: "环境", pinyin: "huanjing", meaning: "hoàn cảnh" },
-            { word: "附近", pinyin: "fujin", meaning: "lân cận" },
-            { word: "电视台", pinyin: "dianshitai", meaning: "đài truyền hình" },
-            { word: "台", pinyin: "tai", meaning: "đài, sân khấu" },
-            { word: "表演", pinyin: "biaoyan", meaning: "biểu diễn" },
-            { word: "节目", pinyin: "jiemu", meaning: "tiết mục" },
-            { word: "愿意", pinyin: "yuanyi", meaning: "bằng lòng" },
-            { word: "不错", pinyin: "bucuo", meaning: "tốt, hay" },
-            { word: "错", pinyin: "cuo", meaning: "sai" },
-            { word: "进步", pinyin: "jinbu", meaning: "tiến bộ" },
-            { word: "水平", pinyin: "shuiping", meaning: "trình độ" },
-            { word: "提高", pinyin: "tigao", meaning: "nâng cao" },
-            { word: "快", pinyin: "kuai", meaning: "nhanh" },
-            { word: "哪里", pinyin: "nali", meaning: "ở đâu" },
-            { word: "准", pinyin: "zhun", meaning: "chính xác" },
-            { word: "流利", pinyin: "liuli", meaning: "lưu loát" },
-            { word: "那么", pinyin: "name", meaning: "vậy, thế kia" },
-            { word: "早", pinyin: "zao", meaning: "sớm" },
-            { word: "运动", pinyin: "yundong", meaning: "vận động" },
-            { word: "跑步", pinyin: "paobu", meaning: "chạy bộ" },
-            { word: "跑", pinyin: "pao", meaning: "chạy" },
-            { word: "篮球", pinyin: "lanqiu", meaning: "bóng rổ" },
-            { word: "球", pinyin: "qiu", meaning: "bóng, cầu" },
-            { word: "刚才", pinyin: "gangcai", meaning: "lúc nãy" },
-            { word: "坚持", pinyin: "jianchi", meaning: "kiên trì" },
-            { word: "因为", pinyin: "yinwei", meaning: "bởi vì" }
+            { word: "个子", pinyin: "gezi", meaning: "vóc dáng" }, { word: "矮", pinyin: "ai", meaning: "thấp" }, { word: "历史", pinyin: "lishi", meaning: "Lịch sử" }, { word: "体育", pinyin: "tiyu", meaning: "Thể dục" }, { word: "数学", pinyin: "shuxue", meaning: "Toán" }, { word: "方便", pinyin: "fangbian", meaning: "thuận tiện" }, { word: "自行车", pinyin: "zixingche", meaning: "xe đạp" }, { word: "骑", pinyin: "qi", meaning: "cưỡi ngựa, đạp xe, lái xe" }, { word: "旧", pinyin: "jiu", meaning: "cũ" }, { word: "换", pinyin: "huan", meaning: "đổi" }, { word: "地方", pinyin: "difang", meaning: "nơi" }, { word: "中介", pinyin: "zhongjie", meaning: "môi giới" }, { word: "主要", pinyin: "zhuyao", meaning: "chủ yếu" }, { word: "环境", pinyin: "huanjing", meaning: "hoàn cảnh" }, { word: "附近", pinyin: "fujin", meaning: "lân cận" }, { word: "电视台", pinyin: "dianshitai", meaning: "đài truyền hình" }, { word: "台", pinyin: "tai", meaning: "đài, sân khấu" }, { word: "表演", pinyin: "biaoyan", meaning: "biểu diễn" }, { word: "节目", pinyin: "jiemu", meaning: "tiết mục" }, { word: "愿意", pinyin: "yuanyi", meaning: "bằng lòng" }, { word: "不错", pinyin: "bucuo", meaning: "tốt, hay" }, { word: "错", pinyin: "cuo", meaning: "sai" }, { word: "进步", pinyin: "jinbu", meaning: "tiến bộ" }, { word: "水平", pinyin: "shuiping", meaning: "trình độ" }, { word: "提高", pinyin: "tigao", meaning: "nâng cao" }, { word: "快", pinyin: "kuai", meaning: "nhanh" }, { word: "哪里", pinyin: "nali", meaning: "ở đâu" }, { word: "准", pinyin: "zhun", meaning: "chính xác" }, { word: "流利", pinyin: "liuli", meaning: "lưu loát" }, { word: "那么", pinyin: "name", meaning: "vậy, thế kia" }, { word: "早", pinyin: "zao", meaning: "sớm" }, { word: "运动", pinyin: "yundong", meaning: "vận động" }, { word: "跑步", pinyin: "paobu", meaning: "chạy bộ" }, { word: "跑", pinyin: "pao", meaning: "chạy" }, { word: "篮球", pinyin: "lanqiu", meaning: "bóng rổ" }, { word: "球", pinyin: "qiu", meaning: "bóng, cầu" }, { word: "刚才", pinyin: "gangcai", meaning: "lúc nãy" }, { word: "坚持", pinyin: "jianchi", meaning: "kiên trì" }, { word: "因为", pinyin: "yinwei", meaning: "bởi vì" }
         ]
     };
 
-    // 2. DỮ LIỆU ĐIỀN TỪ (BÀI 1 - 3)
     const fillData = {
         "1": {
             wordBank: "周末, 打算, 游戏, 一直, 作业, 着急, 复习, 面包, 带, 地图, 搬, 现在, 一起, 咱们, 时候, 常, 借, 上网, 查, 资料, 总是, 安静, 晚上, 课文, 预习, 生词, 或者, 练习, 聊天儿, 邮件, 休息",
             questions: [
-                { q: "这个 ________ 你有什么安排？", a: "周末" },
-                { q: "我 ________ 去超市买一些做中国菜的东西。", a: "打算" },
-                { q: "明天有考试，你不要玩电脑 ________ 了。", a: "游戏" },
-                { q: "别 ________，咱们还有很多时间。", a: "着急" },
-                { q: "你的汉语 ________ 写完了吗？", a: "作业" },
-                { q: "我 ________ 在复习课文，没有时间出去玩。", a: "一直" },
-                { q: "早上我没吃早饭，只吃了一个 ________。", a: "面包" },
-                { q: "去那个地方旅行的时候，记得 ________ 上地图。", a: "带" },
-                { q: "我不知道怎么走，你可以给我看一下 ________ 吗？", a: "地图" },
-                { q: "朋友今天在帮我 ________ 家。", a: "搬" },
-                { q: "________ 几点了？", a: "现在" },
-                { q: "我们 ________ 去吃晚饭吧。", a: "一起" },
-                { q: "________ 走吧，电影马上就要开始了。", a: "咱们" },
-                { q: "工作累的 ________，我喜欢听一听音乐。", a: "时候" },
-                { q: "我 ________ 去图书馆看书。", a: "常" },
-                { q: "我想去图书馆 ________ 几本书。", a: "借" },
-                { q: "晚上我常 ________ 查一些关于中医的资料。", a: "上网" },
-                { q: "我在网上 ________ 到了很多有用的东西。", a: "查" },
-                { q: "写这份报告需要很多 ________。", a: "资料" },
-                { q: "他 ________ 一个人在宿舍安静地看书。", a: "总是" },
-                { q: "医院里需要保持 ________。", a: "安静" },
-                { q: "今天 ________ 我们去公园散步吧。", a: "晚上" },
-                { q: "老师让我们回家好好预习 ________。", a: "课文" },
-                { q: "上课前，你需要先 ________ 明天要学的生词。", a: "预习" },
-                { q: "这个 ________ 我不知道是什么意思，需要查字典。", a: "生词" },
-                { q: "周末我喜欢在家看书 ________ 跟朋友去超市。", a: "或者" },
-                { q: "多做 ________ 可以帮助你学好汉语。", a: "练习" },
-                { q: "下课后，我们在宿舍喝茶、________。", a: "聊天儿" },
-                { q: "每天早上我都要收发很多 ________。", a: "邮件" },
-                { q: "一直工作让人太累了，你需要停下来好好 ________。", a: "休息" }
+                { q: "这个 ________ 你有什么安排？", a: "周末" }, { q: "我 ________ 去超市买一些做中国菜的东西。", a: "打算" }, { q: "明天有考试，你不要玩电脑 ________ 了。", a: "游戏" }, { q: "别 ________，咱们还有很多时间。", a: "着急" }, { q: "你的汉语 ________ 写完了吗？", a: "作业" }, { q: "我 ________ 在复习课文，没有时间出去玩。", a: "一直" }, { q: "早上我没吃早饭，只吃了一个 ________。", a: "面包" }, { q: "去那个地方旅行的时候，记得 ________ 上地图。", a: "带" }, { q: "我不知道怎么走，你可以给我看一下 ________ 吗？", a: "地图" }, { q: "朋友今天在帮我 ________ 家。", a: "搬" }, { q: "________ 几点了？", a: "现在" }, { q: "我们 ________ 去吃晚饭吧。", a: "一起" }, { q: "________ 走吧，电影马上就要开始了。", a: "咱们" }, { q: "工作累的 ________，我喜欢听一听音乐。", a: "时候" }, { q: "我 ________ 去图书馆看书。", a: "常" }, { q: "我想去图书馆 ________ 几本书。", a: "借" }, { q: "晚上我常 ________ 查一些关于中医的资料。", a: "上网" }, { q: "我在网上 ________ 到了很多有用的东西。", a: "查" }, { q: "写这份报告需要很多 ________。", a: "资料" }, { q: "他 ________ 一个人在宿舍安静地看书。", a: "总是" }, { q: "医院里需要保持 ________。", a: "安静" }, { q: "今天 ________ 我们去公园散步吧。", a: "晚上" }, { q: "老师让我们回家好好预习 ________。", a: "课文" }, { q: "上课前，你需要先 ________ 明天要学的生词。", a: "预习" }, { q: "这个 ________ 我不知道是什么意思，需要查字典。", a: "生词" }, { q: "周末我喜欢在家看书 ________ 跟朋友去超市。", a: "或者" }, { q: "多做 ________ 可以帮助你学好汉语。", a: "练习" }, { q: "下课后，我们在宿舍喝茶、________。", a: "聊天儿" }, { q: "每天早上我都要收发很多 ________。", a: "邮件" }, { q: "一直工作让人太累了，你需要停下来好好 ________。", a: "休息" }
             ]
         },
         "2": {
             wordBank: "腿, 疼, 脚, 树, 容易, 难, 太太, 秘书, 经理, 办公室, 辆, 楼, 拿, 把, 伞, 胖, 其实, 瘦, 正在, 出来, 来, 音乐, 没有, 录音, 书店, 想, 汉英, 坐, 挤, 骑",
             questions: [
-                { q: "昨天爬山太累了，今天觉得我的 ________ 很疼。", a: "腿" },
-                { q: "我不小心摔倒了，现在腿有点儿 ________。", a: "疼" },
-                { q: "他的 ________ 很大，买不到合适的鞋。", a: "脚" },
-                { q: "公园里有很多很高很绿的 ________。", a: "树" },
-                { q: "这个问题很 ________，我一分钟就做完了。", a: "容易" },
-                { q: "汉语的汉字太 ________ 写了，我总是记不住。", a: "难" },
-                { q: "王 ________，您好！这是您的茶。", a: "太太" },
-                { q: "李经理的 ________ 很漂亮也很聪明，工作很认真。", a: "秘书" },
-                { q: "我们的 ________ 今天去北京出差了，不在公司。", a: "经理" },
-                { q: "老师正在 ________ 里跟学生说话。", a: "办公室" },
-                { q: "门外停着一 ________ 蓝色的新自行车。", a: "辆" },
-                { q: "我家住在五 ________，每天都要自己走上去。", a: "楼" },
-                { q: "你能帮我 ________ 一下这本书吗？我手里东西太多了。", a: "拿" },
-                { q: "外边下雨了，记得带一 ________ 伞。", a: "把" },
-                { q: "这把 ________ 太小了，不够两个人用。", a: "伞" },
-                { q: "我最近吃了太多巧克力，越来越 ________ 了。", a: "胖" },
-                { q: "他看起来很胖，________ 他一点儿也不胖。", a: "其实" },
-                { q: "那个很 ________ 的女孩是我的妹妹。", a: "瘦" },
-                { q: "老师 ________ 上课，请大家安静一点儿。", a: "正在" },
-                { q: "你快 ________ 吧，大家都在外面等你呢。", a: "出来" },
-                { q: "你什么时候 ________ 我家玩？", a: "来" },
-                { q: "妹妹正坐在房间里听 ________。", a: "音乐" },
-                { q: "昨天我去超市了，但是 ________ 买到你想吃的东西。", a: "没有" },
-                { q: "上课的时候，老师让我们听了一段 ________。", a: "录音" },
-                { q: "下午我想去 ________ 买几本中文书。", a: "书店" },
-                { q: "这么晚了，你在 ________ 什么呢？", a: "想" },
-                { q: "请借给我你的 ________ 词典，我查一个字。", a: "汉英" },
-                { q: "大家都别站着了，快 ________ 下吧。", a: "坐" },
-                { q: "早上坐公共汽车太 ________ 了，我没有座位。", a: "挤" },
-                { q: "我每天 ________ 自行车去学校。", a: "骑" }
+                { q: "昨天爬山太累了，今天觉得我的 ________ 很疼。", a: "腿" }, { q: "我不小心摔倒了，现在腿有点儿 ________。", a: "疼" }, { q: "他的 ________ 很大，买不到合适的鞋。", a: "脚" }, { q: "公园里有很多很高很绿的 ________。", a: "树" }, { q: "这个问题很 ________，我一分钟就做完了。", a: "容易" }, { q: "汉语的汉字太 ________ 写了，我总是记不住。", a: "难" }, { q: "王 ________，您好！这是您的茶。", a: "太太" }, { q: "李经理的 ________ 很漂亮也很聪明，工作很认真。", a: "秘书" }, { q: "我们的 ________ 今天去北京出差了，不在公司。", a: "经理" }, { q: "老师正在 ________ 里跟学生说话。", a: "办公室" }, { q: "门外停着一 ________ 蓝色的新自行车。", a: "辆" }, { q: "我家住在五 ________，每天都要自己走上去。", a: "楼" }, { q: "你能帮我 ________ 一下这本书吗？我手里东西太多了。", a: "拿" }, { q: "外边下雨了，记得带一 ________ 伞。", a: "把" }, { q: "这把 ________ 太小了，不够两个人用。", a: "伞" }, { q: "我最近吃了太多巧克力，越来越 ________ 了。", a: "胖" }, { q: "他看起来很胖，________ 他一点儿也不胖。", a: "其实" }, { q: "那个很 ________ 的女孩是我的妹妹。", a: "瘦" }, { q: "老师 ________ 上课，请大家安静一点儿。", a: "正在" }, { q: "你快 ________ 吧，大家都在外面等你呢。", a: "出来" }, { q: "你什么时候 ________ 我家玩？", a: "来" }, { q: "妹妹正坐在房间里听 ________。", a: "音乐" }, { q: "昨天我去超市了，但是 ________ 买到你想吃的东西。", a: "没有" }, { q: "上课的时候，老师让我们听了一段 ________。", a: "录音" }, { q: "下午我想去 ________ 买几本中文书。", a: "书店" }, { q: "这么晚了，你在 ________ 什么呢？", a: "想" }, { q: "请借给我你的 ________ 词典，我查一个字。", a: "汉英" }, { q: "大家都别站着了，快 ________ 下吧。", a: "坐" }, { q: "早上坐公共汽车太 ________ 了，我没有座位。", a: "挤" }, { q: "我每天 ________ 自行车去学校。", a: "骑" }
             ]
         },
         "3": {
             wordBank: "还是, 爬山, 小心, 条, 裤子, 记得, 衬衫, 元, 新鲜, 甜, 只, 放, 饮料, 或者, 舒服, 花, 绿, 包裹, 顺便, 替, 邮票, 份, 报纸, 不用, 青年, 旅行, 代表, 翻译, 飞机, 帮忙",
             questions: [
-                { q: "你想喝绿茶 ________ 喝红茶？", a: "还是" },
-                { q: "周末天气很好，我们去 ________ 吧。", a: "爬山" },
-                { q: "路上车很多，你骑自行车一定要 ________。", a: "小心" },
-                { q: "这 ________ 裤子太长了，有短一点儿的吗？", a: "条" },
-                { q: "我昨天新买了一条黑色的 ________。", a: "裤子" },
-                { q: "你还 ________ 我吗？我是珍妮的朋友。", a: "记得" },
-                { q: "你的这件白色 ________ 穿上真好看。", a: "衬衫" },
-                { q: "这本书五十 ________，我觉得有点儿贵。", a: "元" },
-                { q: "这里的苹果很 ________，你可以多买几个。", a: "新鲜" },
-                { q: "这个西瓜太 ________ 了，真好吃。", a: "甜" },
-                { q: "我的房间里 ________ 有一把椅子，不够坐。", a: "只" },
-                { q: "请把你的包 ________ 在这张桌子上。", a: "放" },
-                { q: "冰箱里有很多好喝的 ________。", a: "饮料" },
-                { q: "我们坐火车去 ________ 坐飞机去都可以。", a: "或者" },
-                { q: "这件衣服穿着非常 ________。", a: "舒服" },
-                { q: "公园里开了很多红色的 ________，很漂亮。", a: "花" },
-                { q: "春天来了，树变 ________ 了。", a: "绿" },
-                { q: "下午我要去邮局取一个 ________。", a: "包裹" },
-                { q: "你去超市的时候，________ 帮我买一瓶水吧。", a: "顺便" },
-                { q: "我今天没空，你能 ________ 我去开会吗？", a: "替" },
-                { q: "寄信的时候，你需要贴一张 ________。", a: "邮票" },
-                { q: "劳驾，请给我一 ________ 今天的报纸。", a: "份" },
-                { q: "爷爷每天早上都有看 ________ 的习惯。", a: "报纸" },
-                { q: "你的病已经好了，________ 吃药了。", a: "不用" },
-                { q: "很多 ________ 人喜欢一边上网一边听音乐。", a: "青年" },
-                { q: "下个月我打算去上海 ________。", a: "旅行" },
-                { q: "他是我们公司的 ________，今天去开会了。", a: "代表" },
-                { q: "你的汉语这么好，可以给我当 ________ 吗？", a: "翻译" },
-                { q: "我们坐 ________ 去上海，只要两个小时就到了。", a: "飞机" },
-                { q: "我有点儿事，你能给我帮个 ________ 吗？", a: "帮忙" }
+                { q: "你想喝绿茶 ________ 喝红茶？", a: "还是" }, { q: "周末天气很好，我们去 ________ 吧。", a: "爬山" }, { q: "路上车很多，你骑自行车一定要 ________。", a: "小心" }, { q: "这 ________ 裤子太长了，有短一点儿的吗？", a: "条" }, { q: "我昨天新买了一条黑色的 ________。", a: "裤子" }, { q: "你还 ________ 我吗？我是珍妮的朋友。", a: "记得" }, { q: "你的这件白色 ________ 穿上真好看。", a: "衬衫" }, { q: "这本书五十 ________，我觉得有点儿贵。", a: "元" }, { q: "这里的苹果很 ________，你可以多买几个。", a: "新鲜" }, { q: "这个西瓜太 ________ 了，真好吃。", a: "甜" }, { q: "我的房间里 ________ 有一把椅子，不够坐。", a: "只" }, { q: "请把你的包 ________ 在这张桌子上。", a: "放" }, { q: "冰箱里有很多好喝的 ________。", a: "饮料" }, { q: "我们坐火车去 ________ 坐飞机去都可以。", a: "或者" }, { q: "这件衣服穿着非常 ________。", a: "舒服" }, { q: "公园里开了很多红色的 ________，很漂亮。", a: "花" }, { q: "春天来了，树变 ________ 了。", a: "绿" }, { q: "下午我要去邮局取一个 ________。", a: "包裹" }, { q: "你去超市的时候，________ 帮我买一瓶水吧。", a: "顺便" }, { q: "我今天没空，你能 ________ 我去开会吗？", a: "替" }, { q: "寄信的时候，你需要贴一张 ________。", a: "邮票" }, { q: "劳驾，请给我一 ________ 今天的报纸。", a: "份" }, { q: "爷爷每天早上都有看 ________ 的习惯。", a: "报纸" }, { q: "你的病已经好了，________ 吃药了。", a: "不用" }, { q: "很多 ________ 人喜欢一边上网一边听音乐。", a: "青年" }, { q: "下个月我打算去上海 ________。", a: "旅行" }, { q: "他是我们公司的 ________，今天去开会了。", a: "代表" }, { q: "你的汉语这么好，可以给我当 ________ 吗？", a: "翻译" }, { q: "我们坐 ________ 去上海，只要两个小时就到了。", a: "飞机" }, { q: "我有点儿事，你能给我帮个 ________ 吗？", a: "帮忙" }
             ]
-        }
-    };
-"4": {
+        },
+        "4": {
             wordBank: "比赛, 照片, 年级, 又, 聪明, 热情, 努力, 总是, 回答, 站, 饿, 蛋糕, 超市, 年轻, 认真, 客人, 羽绒服, 便宜, 长, 一点儿, 短, 深, 试, 浅, 可以, 当然, 肥, 合适, 好看, 种, 打折",
             questions: [
-                { q: "明天下午我们学校有一场篮球 ________。", a: "比赛" },
-                { q: "这张 ________ 上的人是你姐姐吗？真漂亮。", a: "照片" },
-                { q: "你现在是大学几 ________ 的学生？", a: "年级" },
-                { q: "这个孩子 ________ 聪明又可爱。", a: "又" },
-                { q: "大家都说小明是一个非常 ________ 的学生，什么都会。", a: "聪明" },
-                { q: "这里的服务员对客人非常 ________。", a: "热情" },
-                { q: "只要你 ________ 学习，你的汉语一定会更好。", a: "努力" },
-                { q: "他 ________ 第一个来到办公室工作。", a: "总是" },
-                { q: "老师问了一个问题，但是没有人 ________。", a: "回答" },
-                { q: "别在门外 ________ 着了，快进来坐吧。", a: "站" },
-                { q: "早上没吃早饭，现在我觉得有点儿 ________ 了。", a: "饿" },
-                { q: "今天是朋友的生日，我给她买了一个大 ________。", a: "蛋糕" },
-                { q: "家里没有牛奶了，你去 ________ 买几瓶吧。", a: "超市" },
-                { q: "这位教我们听力课的老师非常 ________。", a: "年轻" },
-                { q: "哥哥做事非常 ________，经理很喜欢他。", a: "认真" },
-                { q: "今天周末，我家来了很多 ________。", a: "客人" },
-                { q: "冬天快到了，天气很冷，你需要买一件 ________。", a: "羽绒服" },
-                { q: "这件衣服不贵，非常 ________。", a: "便宜" },
-                { q: "这条裤子有点儿 ________，穿上不方便。", a: "长" },
-                { q: "饭菜有点儿咸，请给我 ________ 水喝。", a: "一点儿" },
-                { q: "夏天大家都喜欢穿 ________ 一点儿的衣服。", a: "短" },
-                { q: "这个颜色太 ________ 了，有浅一点儿的吗？", a: "深" },
-                { q: "我觉得这双鞋不错，我可以穿上 ________ 一下吗？", a: "试" },
-                { q: "年轻人穿 ________ 颜色的衬衫很好看。", a: "浅" },
-                { q: "劳驾，我 ________ 坐在这个座位上吗？", a: "可以" },
-                { q: "“我可以借你的汉英词典吗？” —— “________ 可以。”", a: "当然" },
-                { q: "这件衬衫太 ________ 了，你穿有点儿大。", a: "肥" },
-                { q: "这双鞋不大也不小，大小非常 ________。", a: "合适" },
-                { q: "这件羽绒服不仅便宜，而且穿上很 ________。", a: "好看" },
-                { q: "超市里有很多 ________ 饮料，你想喝哪一种？", a: "种" },
-                { q: "今天这家商店正在 ________，我们去看看吧。", a: "打折" }
+                { q: "明天下午我们学校有一场篮球 ________。", a: "比赛" }, { q: "这张 ________ 上的人是你姐姐吗？真漂亮。", a: "照片" }, { q: "你现在是大学几 ________ 的学生？", a: "年级" }, { q: "这个孩子 ________ 聪明又可爱。", a: "又" }, { q: "大家都说小明是一个非常 ________ 的学生，什么都会。", a: "聪明" }, { q: "这里的服务员对客人非常 ________。", a: "热情" }, { q: "只要你 ________ 学习，你的汉语一定会更好。", a: "努力" }, { q: "他 ________ 第一个来到办公室工作。", a: "总是" }, { q: "老师问了一个问题，但是没有人 ________。", a: "回答" }, { q: "别在门外 ________ 着了，快进来坐吧。", a: "站" }, { q: "早上没吃早饭，现在我觉得有点儿 ________ 了。", a: "饿" }, { q: "今天是朋友的生日，我给她买了一个大 ________。", a: "蛋糕" }, { q: "家里没有牛奶了，你去 ________ 买几瓶吧。", a: "超市" }, { q: "这位教我们听力课的老师非常 ________。", a: "年轻" }, { q: "哥哥做事非常 ________，经理很喜欢他。", a: "认真" }, { q: "今天周末，我家来了很多 ________。", a: "客人" }, { q: "冬天快到了，天气很冷，你需要买一件 ________。", a: "羽绒服" }, { q: "这件衣服不贵，非常 ________。", a: "便宜" }, { q: "这条裤子有点儿 ________，穿上不方便。", a: "长" }, { q: "饭菜有点儿咸，请给我 ________ 水喝。", a: "一点儿" }, { q: "夏天大家都喜欢穿 ________ 一点儿的衣服。", a: "短" }, { q: "这个颜色太 ________ 了，有浅一点儿的吗？", a: "深" }, { q: "我觉得这双鞋不错，我可以穿上 ________ 一下吗？", a: "试" }, { q: "年轻人穿 ________ 颜色的衬衫很好看。", a: "浅" }, { q: "劳驾，我 ________ 坐在这个座位上吗？", a: "可以" }, { q: "“我可以借你的汉英词典吗？” —— “________ 可以。”", a: "当然" }, { q: "这件衬衫太 ________ 了，你穿有点儿大。", a: "肥" }, { q: "这双鞋不大也不小，大小非常 ________。", a: "合适" }, { q: "这件羽绒服不仅便宜，而且穿上很 ________。", a: "好看" }, { q: "超市里有很多 ________ 饮料，你想喝哪一种？", a: "种" }, { q: "今天这家商店正在 ________，我们去看看吧。", a: "打折" }
             ]
         },
         "5": {
             wordBank: "发烧, 为, 照顾, 用, 感冒, 季节, 春天, 草, 夏天, 裙子, 最近, 越, 年, 今年, 明年, 去年, 后年, 毕业, 多, 岁, 属, 狗, 月, 号, 生日, 正好, 过, 准备, 举行, 晚会, 参加, 时间, 快乐",
             questions: [
-                { q: "昨天下了大雨，我不小心淋雨，今天就 ________ 了。", a: "感冒" },
-                { q: "你的头很热，是不是 ________ 了？快去医院看看。", a: "发烧" },
-                { q: "妈妈每天都早起 ________ 我们做早饭。", a: "为" },
-                { q: "奶奶生病了，妈妈在医院里 ________ 她。", a: "照顾" },
-                { q: "只是一个小感冒，不 ________ 去医院看医生。", a: "用" },
-                { q: "一年有四个 ________，你最喜欢哪一个？", a: "季节" },
-                { q: "________ 天气变暖和了，公园里的花都开了。", a: "春天" },
-                { q: "外面的 ________ 变绿了，非常漂亮。", a: "草" },
-                { q: "________ 天气太热了，大家都喜欢去游泳。", a: "夏天" },
-                { q: "姐姐新买了一条红色的 ________，穿上很好看。", a: "裙子" },
-                { q: "我 ________ 太忙了，没有时间去跟朋友看电影。", a: "最近" },
-                { q: "他的汉语说得 ________ 来越流利了。", a: "越" },
-                { q: "大学学习一般需要四 ________ 的时间。", a: "年" },
-                { q: "我是 ________ 来到中国学习的，已经学习一年了。", a: "去年" },
-                { q: "________ 是2026年，明年就是2027年了。", a: "今年" },
-                { q: "哥哥今年夏天就要大学 ________ 了，正在找工作。", a: "毕业" },
-                { q: "你今年 ________ 大了？", a: "多" },
-                { q: "我的小妹妹今年只有五 ________。", a: "岁" },
-                { q: "你是哪一年出生的，________ 什么？", a: "属" },
-                { q: "我很喜欢小动物，家里养了一只小 ________。", a: "狗" },
-                { q: "今天是八 ________ 十五号，天气很不错。", a: "月" },
-                { q: "明天是我的生日，也就是五月十 ________。", a: "号" },
-                { q: "祝你生日 ________！", a: "快乐" },
-                { q: "你来得 ________，我们正打算去吃午饭，一起去吧。", a: "正好" },
-                { q: "周末我们打算去朋友家 ________ 生日。", a: "过" },
-                { q: "我们正在 ________ 明天的汉语考试，有很多生词。", a: "准备" },
-                { q: "学校下个星期要 ________ 一场非常热闹的比赛。", a: "举行" },
-                { q: "今天晚上有一个生日 ________，你想去吗？", a: "晚会" },
-                { q: "你有 ________ 跟我一起去超市买点儿东西吗？", a: "时间" },
-                { q: "每天都能做自己喜欢的事情，我觉得很 ________。", a: "快乐" }
+                { q: "昨天下了大雨，我不小心淋雨，今天就 ________ 了。", a: "感冒" }, { q: "你的头很热，是不是 ________ 了？快去医院看看。", a: "发烧" }, { q: "妈妈每天都早起 ________ 我们做早饭。", a: "为" }, { q: "奶奶生病了，妈妈在医院里 ________ 她。", a: "照顾" }, { q: "只是一个小感冒，不 ________ 去医院看医生。", a: "用" }, { q: "一年有四个 ________，你最喜欢哪一个？", a: "季节" }, { q: "________ 天气变暖和了，公园里的花都开了。", a: "春天" }, { q: "外面的 ________ 变绿了，非常漂亮。", a: "草" }, { q: "________ 天气太热了，大家都喜欢去游泳。", a: "夏天" }, { q: "姐姐新买了一条红色的 ________，穿上很好看。", a: "裙子" }, { q: "我 ________ 太忙了，没有时间去跟朋友看电影。", a: "最近" }, { q: "他的汉语说得 ________ 来越流利了。", a: "越" }, { q: "大学学习一般需要四 ________ 的时间。", a: "年" }, { q: "我是 ________ 来到中国学习的，已经学习一年了。", a: "去年" }, { q: "________ 是2026年，明年就是2027年了。", a: "今年" }, { q: "哥哥今年夏天就要大学 ________ 了，正在找工作。", a: "毕业" }, { q: "你今年 ________ 大了？", a: "多" }, { q: "我的小妹妹今年只有五 ________。", a: "岁" }, { q: "你是哪一年出生的，________ 什么？", a: "属" }, { q: "我很喜欢小动物，家里养了一只小 ________。", a: "狗" }, { q: "今天是八 ________ 十五号，天气很不错。", a: "月" }, { q: "明天是我的生日，也就是五月十 ________。", a: "号" }, { q: "祝你生日 ________！", a: "快乐" }, { q: "你来得 ________，我们正打算去吃午饭，一起去吧。", a: "正好" }, { q: "周末我们打算去朋友家 ________ 生日。", a: "过" }, { q: "我们正在 ________ 明天的汉语考试，有很多生词。", a: "准备" }, { q: "学校下个星期要 ________ 一场非常热闹的比赛。", a: "举行" }, { q: "今天晚上有一个生日 ________，你想去吗？", a: "晚会" }, { q: "你有 ________ 跟我一起去超市买点儿东西吗？", a: "时间" }, { q: "每天都能做自己喜欢的事情，我觉得很 ________。", a: "快乐" }
             ]
         },
         "6": {
             wordBank: "眼镜, 突然, 离开, 清楚, 刚才, 帮忙, 特别, 讲, 明白, 锻炼, 音乐, 公园, 聊天儿, 睡着, 更, 每, 早上, 起床, 早饭, 午饭, 晚饭, 差, 分钟, 节, 教室, 操场, 洗澡, 然后, 集合, 准时",
             questions: [
-                { q: "我看不清黑板上的字，因为没戴 ________。", a: "眼镜" },
-                { q: "天气预报没说下雨，怎么 ________ 下起大雨来了？", a: "突然" },
-                { q: "他上个月 ________ 了北京，去了上海工作。", a: "离开" },
-                { q: "老师写在黑板上的汉字，你都看 ________ 了吗？", a: "清楚" },
-                { q: "________ 经理还在办公室，现在不知道去哪儿了。", a: "刚才" },
-                { q: "这个箱子太重了，你能过来给我帮个 ________ 吗？", a: "帮忙" },
-                { q: "今天的汉语课 ________ 难，很多词我都不懂。", a: "特别" },
-                { q: "请你给大家 ________ 一下这道题怎么做吧。", a: "讲" },
-                { q: "听了老师的话，我终于 ________ 这个词的意思了。", a: "明白" },
-                { q: "爷爷每天早上都去公园 ________ 身体。", a: "锻炼" },
-                { q: "睡觉前听听 ________，可以让人觉得很放松。", a: "音乐" },
-                { q: "周末我常去 ________ 散步、看花。", a: "公园" },
-                { q: "下课后，我和同学们在宿舍里喝茶、________。", a: "聊天儿" },
-                { q: "昨天晚上我喝了咖啡，所以很晚才 ________。", a: "睡着" },
-                { q: "这件衣服比那件衣服 ________ 漂亮。", a: "更" },
-                { q: "________ 个星期天，我们都去打篮球。", a: "每" },
-                { q: "________ 六点半，妈妈就起来做早饭了。", a: "早上" },
-                { q: "昨晚睡得太晚，今天早上我不想 ________。", a: "起床" },
-                { q: "你今天吃 ________ 了吗？我请你吃包子。", a: "早饭" },
-                { q: "中午十二点我们下课，然后一起去吃 ________。", a: "午饭" },
-                { q: "晚上我们不打算出去吃 ________，想在家里自己做。", a: "晚饭" },
-                { q: "现在是 ________ 五分八点，快要迟到了。", a: "差" },
-                { q: "从我家到学校走路需要十分 ________。", a: "分钟" },
-                { q: "今天上午我们有四 ________ 课。", a: "节" },
-                { q: "学生们都在 ________ 里安静地看书。", a: "教室" },
-                { q: "下午有很多学生在 ________ 上踢足球。", a: "操场" },
-                { q: "运动完以后，我回宿舍洗了个 ________。", a: "洗澡" },
-                { q: "我每天先复习生词，________ 做作业。", a: "然后" },
-                { q: "明天早上八点，大家在学校门口 ________。", a: "集合" },
-                { q: "火车是九点开的，请大家 ________ 到达火车站。", a: "准时" }
+                { q: "我看不清黑板上的字，因为没戴 ________。", a: "眼镜" }, { q: "天气预报没说下雨，怎么 ________ 下起大雨来了？", a: "突然" }, { q: "他上个月 ________ 了北京，去了上海工作。", a: "离开" }, { q: "老师写在黑板上的汉字，你都看 ________ 了吗？", a: "清楚" }, { q: "________ 经理还在办公室，现在不知道去哪儿了。", a: "刚才" }, { q: "这个箱子太重了，你能过来给我帮个 ________ 吗？", a: "帮忙" }, { q: "今天的汉语课 ________ 难，很多词我都不懂。", a: "特别" }, { q: "请你给大家 ________ 一下这道题怎么做吧。", a: "讲" }, { q: "听了老师的话，我终于 ________ 这个词的意思了。", a: "明白" }, { q: "爷爷每天早上都去公园 ________ 身体。", a: "锻炼" }, { q: "睡觉前听听 ________，可以让人觉得很放松。", a: "音乐" }, { q: "周末我常去 ________ 散步、看花。", a: "公园" }, { q: "下课后，我和同学们在宿舍里喝茶、________。", a: "聊天儿" }, { q: "昨天晚上我喝了咖啡，所以很晚才 ________。", a: "睡着" }, { q: "这件衣服比那件衣服 ________ 漂亮。", a: "更" }, { q: "________ 个星期天，我们都去打篮球。", a: "每" }, { q: "________ 六点半，妈妈就起来做早饭了。", a: "早上" }, { q: "昨晚睡得太晚，今天早上我不想 ________。", a: "起床" }, { q: "你今天吃 ________ 了吗？我请你吃包子。", a: "早饭" }, { q: "中午十二点我们下课，然后一起去吃 ________。", a: "午饭" }, { q: "晚上我们不打算出去吃 ________，想在家里自己做。", a: "晚饭" }, { q: "现在是 ________ 五分八点，快要迟到了。", a: "差" }, { q: "从我家到学校走路需要十分 ________。", a: "分钟" }, { q: "今天上午我们有四 ________ 课。", a: "节" }, { q: "学生们都在 ________ 里安静地看书。", a: "教室" }, { q: "下午有很多学生在 ________ 上踢足球。", a: "操场" }, { q: "运动完以后，我回宿舍洗了个 ________。", a: "洗澡" }, { q: "我每天先复习生词，________ 做作业。", a: "然后" }, { q: "明天早上八点，大家在学校门口 ________。", a: "集合" }, { q: "火车是九点开的，请大家 ________ 到达火车站。", a: "准时" }
             ]
         }
-    // 3. DỮ LIỆU ĐỌC HIỂU (BÀI 1 - 3)
+    };
+
     const readData = {
         "1": [
             {
                 passage: "我平时工作很忙，每天都在办公室收发邮件，或者上网查资料。一直工作让我觉得很累，所以我打算这个周末好好休息一下。星期六早上，我不着急起床。起床后，我带上地图，跟朋友一起去了一个很安静的公园散步。公园里人不多，我们在那里聊天儿，感觉非常舒服。中午，我们没有吃面包，而是去超市买了很多东西，回宿舍自己做了一些中国菜。晚上，我们没有看电视剧，也没有看电影，因为我们要复习课文和预习明天的生词。虽然周末也需要学习，但能停下来休息，跟朋友一起做美食，我觉得很快乐。",
                 questions: [
-                    { q: "1. 作者平时的主要工作是什么？", options: ["A. 收发邮件和查资料", "B. 玩游戏", "C. 搬家", "D. 写作业"], a: 0 },
-                    { q: "2. 作者为什么打算周末好好休息？", options: ["A. 因为生病了", "B. 因为一直工作觉得很累", "C. 因为没有朋友", "D. 因为没有时间"], a: 1 },
-                    { q: "3. 星期六早上作者做了什么？", options: ["A. 去看电影", "B. 去超市买东西", "C. 去公园散步", "D. 复习课文"], a: 2 },
-                    { q: "4. 去公园散步时，作者带了什么？", options: ["A. 面包", "B. 电脑", "C. 手机", "D. 地图"], a: 3 },
-                    { q: "5. 作者是跟谁一起去公园的？", options: ["A. 同事", "B. 朋友", "C. 老师", "D. 一个人"], a: 1 },
-                    { q: "6. 公园里的环境怎么样？", options: ["A. 很安静", "B. 人很多", "C. 很大", "D. 很着急"], a: 0 },
-                    { q: "7. 中午他们吃了什么？", options: ["A. 买了面包吃", "B. 饭馆里的菜", "C. 自己做的中国菜", "D. 超市里的面包"], a: 2 },
-                    { q: "8. 晚上他们为什么没有看电视剧？", options: ["A. 电视坏了", "B. 他们不喜欢看", "C. 要复习课文和预习生词", "D. 他们去电影院了"], a: 2 },
-                    { q: "9. 作者的周末有学习的安排吗？", options: ["A. 有", "B. 没有", "C. 只有预习生词", "D. 只有复习课文"], a: 0 },
-                    { q: "10. 作者觉得这个周末过得怎么样？", options: ["A. 很着急", "B. 很快乐", "C. 很累", "D. 很无聊"], a: 1 }
+                    { q: "1. 作者平时的主要工作是什么？", options: ["A. 收发邮件和查资料", "B. 玩游戏", "C. 搬家", "D. 写作业"], a: 0 }, { q: "2. 作者为什么打算周末好好休息？", options: ["A. 因为生病了", "B. 因为一直工作觉得很累", "C. 因为没有朋友", "D. 因为没有时间"], a: 1 }, { q: "3. 星期六早上作者做了什么？", options: ["A. 去看电影", "B. 去超市买东西", "C. 去公园散步", "D. 复习课文"], a: 2 }, { q: "4. 去公园散步时，作者带了什么？", options: ["A. 面包", "B. 电脑", "C. 手机", "D. 地图"], a: 3 }, { q: "5. 作者是跟谁一起去公园的？", options: ["A. 同事", "B. 朋友", "C. 老师", "D. 一个人"], a: 1 }, { q: "6. 公园里的环境怎么样？", options: ["A. 很安静", "B. 人很多", "C. 很大", "D. 很着急"], a: 0 }, { q: "7. 中午他们吃了什么？", options: ["A. 买了面包吃", "B. 饭馆里的菜", "C. 自己做的中国菜", "D. 超市里的面包"], a: 2 }, { q: "8. 晚上他们为什么没有看电视剧？", options: ["A. 电视坏了", "B. 他们不喜欢看", "C. 要复习课文和预习生词", "D. 他们去电影院了"], a: 2 }, { q: "9. 作者的周末有学习的安排吗？", options: ["A. 有", "B. 没有", "C. 只有预习生词", "D. 只有复习课文"], a: 0 }, { q: "10. 作者觉得这个周末过得怎么样？", options: ["A. 很着急", "B. 很快乐", "C. 很累", "D. 很无聊"], a: 1 }
                 ]
             }
         ],
@@ -821,46 +163,19 @@
             {
                 passage: "今天下大雨了，我出门的时候拿了一把伞。我骑自行车去公司，路上车很多，有一点儿挤。到了办公楼，我把车停好，然后去三楼的办公室。李经理正在办公室里听音乐，他的秘书王小姐在外面看资料。李经理看见我进来，让我坐下，问我最近的工作怎么样。其实，我最近觉得工作有点儿难，没有以前那么容易了。经理听了，让我不要着急，他说我可以多跟同事学习。",
                 questions: [
-                    { q: "1. 今天天气怎么样？", options: ["A. 很好", "B. 下大雨了", "C. 很热", "D. 下雪了"], a: 1 },
-                    { q: "2. 作者怎么去公司？", options: ["A. 坐公共汽车", "B. 走路", "C. 骑自行车", "D. 坐出租车"], a: 2 },
-                    { q: "3. 路上怎么样？", options: ["A. 很容易走", "B. 人很少", "C. 车很多，有点儿挤", "D. 很安静"], a: 2 },
-                    { q: "4. 办公室在几楼？", options: ["A. 一楼", "B. 二楼", "C. 三楼", "D. 四楼"], a: 2 },
-                    { q: "5. 李经理正在做什么？", options: ["A. 听音乐", "B. 听录音", "C. 喝茶", "D. 打电话"], a: 0 },
-                    { q: "6. 王秘书在哪里看资料？", options: ["A. 在经理办公室里", "B. 在办公室外面", "C. 在楼下", "D. 在家里"], a: 1 },
-                    { q: "7. 经理让作者做什么？", options: ["A. 站着", "B. 坐下", "C. 出去", "D. 拿伞"], a: 1 },
-                    { q: "8. 经理问了什么问题？", options: ["A. 吃饭了吗", "B. 怎么来公司的", "C. 腿疼不疼", "D. 最近的工作怎么样"], a: 3 },
-                    { q: "9. 作者觉得最近的工作怎么样？", options: ["A. 很容易", "B. 有点儿难", "C. 很无聊", "D. 很快乐"], a: 1 },
-                    { q: "10. 经理让作者怎么做？", options: ["A. 多休息", "B. 多跟同事学习", "C. 换工作", "D. 慢慢做"], a: 1 }
+                    { q: "1. 今天天气怎么样？", options: ["A. 很好", "B. 下大雨了", "C. 很热", "D. 下雪了"], a: 1 }, { q: "2. 作者怎么去公司？", options: ["A. 坐公共汽车", "B. 走路", "C. 骑自行车", "D. 坐出租车"], a: 2 }, { q: "3. 路上怎么样？", options: ["A. 很容易走", "B. 人很少", "C. 车很多，有点儿挤", "D. 很安静"], a: 2 }, { q: "4. 办公室在几楼？", options: ["A. 一楼", "B. 二楼", "C. 三楼", "D. 四楼"], a: 2 }, { q: "5. 李经理正在做什么？", options: ["A. 听音乐", "B. 听录音", "C. 喝茶", "D. 打电话"], a: 0 }, { q: "6. 王秘书在哪里看资料？", options: ["A. 在经理办公室里", "B. 在办公室外面", "C. 在楼下", "D. 在家里"], a: 1 }, { q: "7. 经理让作者做什么？", options: ["A. 站着", "B. 坐下", "C. 出去", "D. 拿伞"], a: 1 }, { q: "8. 经理问了什么问题？", options: ["A. 吃饭了吗", "B. 怎么来公司的", "C. 腿疼不疼", "D. 最近的工作怎么样"], a: 3 }, { q: "9. 作者觉得最近的工作怎么样？", options: ["A. 很容易", "B. 有点儿难", "C. 很无聊", "D. 很快乐"], a: 1 }, { q: "10. 经理让作者怎么做？", options: ["A. 多休息", "B. 多跟同事学习", "C. 换工作", "D. 慢慢做"], a: 1 }
                 ]
             },
             {
                 passage: "我是一个留学生，现在正在中国学习汉语。我们每天都有很多门课，比如综合课、口语课、听力课和阅读课。我觉得口语比较容易，因为我喜欢跟中国朋友聊天儿。但是，阅读和听力有点儿难。教我们听力课的老师是一位很瘦的太太，她上课的时候常常让我们听录音。我们班有二十个学生，大家都在努力学习。周末的时候，我喜欢去书店买汉英词典，或者去公园看看树，听听音乐。",
                 questions: [
-                    { q: "1. 作者是什么人？", options: ["A. 经理", "B. 留学生", "C. 老师", "D. 秘书"], a: 1 },
-                    { q: "2. 作者现在正在学习什么？", options: ["A. 英语", "B. 历史", "C. 体育", "D. 汉语"], a: 3 },
-                    { q: "3. 下面哪门课文章里没有提到？", options: ["A. 体育课", "B. 综合课", "C. 口语课", "D. 听力课"], a: 0 },
-                    { q: "4. 作者觉得什么课比较容易？", options: ["A. 阅读课", "B. 听力课", "C. 口语课", "D. 综合课"], a: 2 },
-                    { q: "5. 为什么作者觉得口语容易？", options: ["A. 因为口语老师很好", "B. 因为他很聪明", "C. 因为他喜欢跟中国朋友聊天儿", "D. 因为不用考试"], a: 2 },
-                    { q: "6. 作者觉得哪门课有点儿难？", options: ["A. 只有阅读", "B. 只有听力", "C. 阅读和听力", "D. 口语和综合"], a: 2 },
-                    { q: "7. 听力课老师长什么样？", options: ["A. 很胖", "B. 很瘦", "C. 很高", "D. 很年轻"], a: 1 },
-                    { q: "8. 听力课上老师常常让学生做什么？", options: ["A. 写汉字", "B. 唱歌", "C. 听录音", "D. 看电影"], a: 2 },
-                    { q: "9. 班里有多少个学生？", options: ["A. 十个", "B. 十二个", "C. 二十个", "D. 二十二个"], a: 2 },
-                    { q: "10. 周末作者喜欢去哪里？", options: ["A. 书店和公园", "B. 电影院", "C. 超市", "D. 饭馆"], a: 0 }
+                    { q: "1. 作者是什么人？", options: ["A. 经理", "B. 留学生", "C. 老师", "D. 秘书"], a: 1 }, { q: "2. 作者现在正在学习什么？", options: ["A. 英语", "B. 历史", "C. 体育", "D. 汉语"], a: 3 }, { q: "3. 下面哪门课文章里没有提到？", options: ["A. 体育课", "B. 综合课", "C. 口语课", "D. 听力课"], a: 0 }, { q: "4. 作者觉得什么课比较容易？", options: ["A. 阅读课", "B. 听力课", "C. 口语课", "D. 综合课"], a: 2 }, { q: "5. 为什么作者觉得口语容易？", options: ["A. 因为口语老师很好", "B. 因为他很聪明", "C. 因为他喜欢跟中国朋友聊天儿", "D. 因为不用考试"], a: 2 }, { q: "6. 作者觉得哪门课有点儿难？", options: ["A. 只有阅读", "B. 只有听力", "C. 阅读和听力", "D. 口语和综合"], a: 2 }, { q: "7. 听力课老师长什么样？", options: ["A. 很胖", "B. 很瘦", "C. 很高", "D. 很年轻"], a: 1 }, { q: "8. 听力课上老师常常让学生做什么？", options: ["A. 写汉字", "B. 唱歌", "C. 听录音", "D. 看电影"], a: 2 }, { q: "9. 班里有多少个学生？", options: ["A. 十个", "B. 十二个", "C. 二十个", "D. 二十二个"], a: 2 }, { q: "10. 周末作者喜欢去哪里？", options: ["A. 书店和公园", "B. 电影院", "C. 超市", "D. 饭馆"], a: 0 }
                 ]
             },
             {
                 passage: "上个周末，我和几个朋友一起去爬山。我们都没有骑车，是坐公共汽车去的，车上没有座位，大家觉得很挤。爬山的时候，小明的腿疼，他说他太胖了，走不快。其实小明不胖，只是他不常运动，所以觉得难。我们在山上看树、看花，休息的时候还听了音乐。下午回来的时候，我的脚也开始疼了。虽然爬山很难，也很累，但是我们都觉得很高兴。下次我们还想再来。",
                 questions: [
-                    { q: "1. 上个周末作者去做了什么？", options: ["A. 游泳", "B. 爬山", "C. 买书", "D. 散步"], a: 1 },
-                    { q: "2. 他们是怎么去的？", options: ["A. 骑自行车", "B. 走路", "C. 坐公共汽车", "D. 坐飞机"], a: 2 },
-                    { q: "3. 公共汽车上怎么样？", options: ["A. 人很少", "B. 很挤，没有座位", "C. 很舒服", "D. 很大"], a: 1 },
-                    { q: "4. 爬山的时候谁的腿疼了？", options: ["A. 作者", "B. 朋友", "C. 小明", "D. 没有人疼"], a: 2 },
-                    { q: "5. 小明说他为什么走不快？", options: ["A. 因为生病了", "B. 因为鞋不舒服", "C. 因为他太胖了", "D. 因为不想走"], a: 2 },
-                    { q: "6. 其实小明真的胖吗？", options: ["A. 很胖", "B. 不胖", "C. 有点儿胖", "D. 不知道"], a: 1 },
-                    { q: "7. 小明为什么觉得爬山难？", options: ["A. 因为山太高", "B. 因为他不常运动", "C. 因为没有喝水", "D. 因为下雨了"], a: 1 },
-                    { q: "8. 休息的时候他们做了什么？", options: ["A. 吃饭", "B. 睡觉", "C. 听音乐", "D. 看书"], a: 2 },
-                    { q: "9. 下午回来时，作者哪里疼？", options: ["A. 腿", "B. 手", "C. 头", "D. 脚"], a: 3 },
-                    { q: "10. 作者觉得爬山怎么样？", options: ["A. 很容易", "B. 很难，很累，但是很高兴", "C. 一点儿也不累", "D. 不好玩"], a: 1 }
+                    { q: "1. 上个周末作者去做了什么？", options: ["A. 游泳", "B. 爬山", "C. 买书", "D. 散步"], a: 1 }, { q: "2. 他们是怎么去的？", options: ["A. 骑自行车", "B. 走路", "C. 坐公共汽车", "D. 坐飞机"], a: 2 }, { q: "3. 公共汽车上怎么样？", options: ["A. 人很少", "B. 很挤，没有座位", "C. 很舒服", "D. 很大"], a: 1 }, { q: "4. 爬山的时候谁的腿疼了？", options: ["A. 作者", "B. 朋友", "C. 小明", "D. 没有人疼"], a: 2 }, { q: "5. 小明说他为什么走不快？", options: ["A. 因为生病了", "B. 因为鞋不舒服", "C. 因为他太胖了", "D. 因为不想走"], a: 2 }, { q: "6. 其实小明真的胖吗？", options: ["A. 很胖", "B. 不胖", "C. 有点儿胖", "D. 不知道"], a: 1 }, { q: "7. 小明为什么觉得爬山难？", options: ["A. 因为山太高", "B. 因为他不常运动", "C. 因为没有喝水", "D. 因为下雨了"], a: 1 }, { q: "8. 休息的时候他们做了什么？", options: ["A. 吃饭", "B. 睡觉", "C. 听音乐", "D. 看书"], a: 2 }, { q: "9. 下午回来时，作者哪里疼？", options: ["A. 腿", "B. 手", "C. 头", "D. 脚"], a: 3 }, { q: "10. 作者觉得爬山怎么样？", options: ["A. 很容易", "B. 很难，很累，但是很高兴", "C. 一点儿也不累", "D. 不好玩"], a: 1 }
                 ]
             }
         ],
@@ -868,161 +183,84 @@
             {
                 passage: "珍妮周末去超市买东西。她想买一条裤子和一件衬衫。超市里的衣服很多，她看中了一条绿色的裤子，很漂亮，穿上也很舒服。这件衬衫只要五十元，很便宜。买完衣服，她去买了一些新鲜的水果和甜的饮料。她记得家里没有苹果了，所以买了很多。晚上回家，她把水果洗干净，放在桌子上。虽然买了很多东西，但是她觉得不累，很开心。",
                 questions: [
-                    { q: "1. 珍妮周末去了哪里？", options: ["A. 邮局", "B. 银行", "C. 超市", "D. 公园"], a: 2 },
-                    { q: "2. 珍妮想买什么？", options: ["A. 电脑和手机", "B. 裤子和衬衫", "C. 苹果和西瓜", "D. 报纸和邮票"], a: 1 },
-                    { q: "3. 她看中的裤子是什么颜色的？", options: ["A. 红色的", "B. 蓝色的", "C. 黑色的", "D. 绿色的"], a: 3 },
-                    { q: "4. 这条裤子穿上怎么样？", options: ["A. 很大", "B. 很长", "C. 很舒服", "D. 不好看"], a: 2 },
-                    { q: "5. 衬衫多少钱？", options: ["A. 五十元", "B. 十五元", "C. 五百元", "D. 五元"], a: 0 },
-                    { q: "6. 她买完衣服去买了什么？", options: ["A. 蔬菜和肉", "B. 汉英词典", "C. 新鲜的水果和甜的饮料", "D. 咖啡和茶"], a: 2 },
-                    { q: "7. 她记得家里没有什么了？", options: ["A. 香蕉", "B. 苹果", "C. 西瓜", "D. 葡萄"], a: 1 },
-                    { q: "8. 水果的味道怎么样？", options: ["A. 酸的", "B. 苦的", "C. 甜的", "D. 文章没写"], a: 2 },
-                    { q: "9. 她回家后把水果放在了哪里？", options: ["A. 冰箱里", "B. 桌子上", "C. 床上", "D. 椅子上"], a: 1 },
-                    { q: "10. 珍妮觉得这一天怎么样？", options: ["A. 很累", "B. 很着急", "C. 很开心，不累", "D. 很无聊"], a: 2 }
+                    { q: "1. 珍妮周末去了哪里？", options: ["A. 邮局", "B. 银行", "C. 超市", "D. 公园"], a: 2 }, { q: "2. 珍妮想买什么？", options: ["A. 电脑和手机", "B. 裤子和衬衫", "C. 苹果和西瓜", "D. 报纸和邮票"], a: 1 }, { q: "3. 她看中的裤子是什么颜色的？", options: ["A. 红色的", "B. 蓝色的", "C. 黑色的", "D. 绿色的"], a: 3 }, { q: "4. 这条裤子穿上怎么样？", options: ["A. 很大", "B. 很长", "C. 很舒服", "D. 不好看"], a: 2 }, { q: "5. 衬衫多少钱？", options: ["A. 五十元", "B. 十五元", "C. 五百元", "D. 五元"], a: 0 }, { q: "6. 她买完衣服去买了什么？", options: ["A. 蔬菜和肉", "B. 汉英词典", "C. 新鲜的水果和甜的饮料", "D. 咖啡和茶"], a: 2 }, { q: "7. 她记得家里没有什么了？", options: ["A. 香蕉", "B. 苹果", "C. 西瓜", "D. 葡萄"], a: 1 }, { q: "8. 水果的味道怎么样？", options: ["A. 酸的", "B. 苦的", "C. 甜的", "D. 文章没写"], a: 2 }, { q: "9. 她回家后把水果放在了哪里？", options: ["A. 冰箱里", "B. 桌子上", "C. 床上", "D. 椅子上"], a: 1 }, { q: "10. 珍妮觉得这一天怎么样？", options: ["A. 很累", "B. 很着急", "C. 很开心，不累", "D. 很无聊"], a: 2 }
                 ]
             },
             {
                 passage: "下个月，我们青年代表团要去上海旅行。大家商量是坐火车还是坐飞机去。坐飞机很快，但是机票有点儿贵；坐火车便宜，但是需要很长时间。最后大家决定坐飞机去。我是这个团的翻译，所以我要帮大家办很多事情，比如买机票、订酒店。出发前，我还要去邮局寄一个包裹，顺便买两张邮票。这次去上海，大家都很高兴，觉得一定没问题。",
                 questions: [
-                    { q: "1. 青年代表团下个月去哪里旅行？", options: ["A. 北京", "B. 广州", "C. 上海", "D. 南京"], a: 2 },
-                    { q: "2. 大家在商量什么事情？", options: ["A. 去哪儿玩", "B. 怎么去（坐火车还是坐飞机）", "C. 穿什么衣服", "D. 吃什么饭"], a: 1 },
-                    { q: "3. 坐飞机去有什么缺点？", options: ["A. 太慢", "B. 不舒服", "C. 机票有点儿贵", "D. 人太多"], a: 2 },
-                    { q: "4. 坐火车去有什么缺点？", options: ["A. 需要很长时间", "B. 太贵", "C. 不安全", "D. 太冷"], a: 0 },
-                    { q: "5. 大家最后决定怎么去上海？", options: ["A. 骑车去", "B. 坐火车去", "C. 坐飞机去", "D. 走路去"], a: 2 },
-                    { q: "6. 作者在这个代表团里当什么？", options: ["A. 经理", "B. 秘书", "C. 导游", "D. 翻译"], a: 3 },
-                    { q: "7. 作者要帮大家办什么事？", options: ["A. 买机票和订酒店", "B. 买早饭", "C. 拿包裹", "D. 借书"], a: 0 },
-                    { q: "8. 出发前，作者要去哪里？", options: ["A. 银行", "B. 邮局", "C. 书店", "D. 办公室"], a: 1 },
-                    { q: "9. 去邮局寄包裹的时候，作者顺便买什么？", options: ["A. 报纸", "B. 饮料", "C. 邮票", "D. 信封"], a: 2 },
-                    { q: "10. 大家的觉得这次旅行怎么样？", options: ["A. 会有很多问题", "B. 一定没问题，很高兴", "C. 会很累", "D. 会迟到"], a: 1 }
+                    { q: "1. 青年代表团下个月去哪里旅行？", options: ["A. 北京", "B. 广州", "C. 上海", "D. 南京"], a: 2 }, { q: "2. 大家在商量什么事情？", options: ["A. 去哪儿玩", "B. 怎么去（坐火车还是坐飞机）", "C. 穿什么衣服", "D. 吃什么饭"], a: 1 }, { q: "3. 坐飞机去有什么缺点？", options: ["A. 太慢", "B. 不舒服", "C. 机票有点儿贵", "D. 人太多"], a: 2 }, { q: "4. 坐火车去有什么缺点？", options: ["A. 需要很长时间", "B. 太贵", "C. 不安全", "D. 太冷"], a: 0 }, { q: "5. 大家最后决定怎么去上海？", options: ["A. 骑车去", "B. 坐火车去", "C. 坐飞机去", "D. 走路去"], a: 2 }, { q: "6. 作者在这个代表团里当什么？", options: ["A. 经理", "B. 秘书", "C. 导游", "D. 翻译"], a: 3 }, { q: "7. 作者要帮大家办什么事？", options: ["A. 买机票和订酒店", "B. 买早饭", "C. 拿包裹", "D. 借书"], a: 0 }, { q: "8. 出发前，作者要去哪里？", options: ["A. 银行", "B. 邮局", "C. 书店", "D. 办公室"], a: 1 }, { q: "9. 去邮局寄包裹的时候，作者顺便买什么？", options: ["A. 报纸", "B. 饮料", "C. 邮票", "D. 信封"], a: 2 }, { q: "10. 大家的觉得这次旅行怎么样？", options: ["A. 会有很多问题", "B. 一定没问题，很高兴", "C. 会很累", "D. 会迟到"], a: 1 }
                 ]
             },
             {
                 passage: "明天我要去外地出差，大概一个星期才能回来。我不放心家里的花，所以请我的好朋友小明替我浇水。我告诉小明：“这些花很喜欢水，你要记得每天浇。还有，客厅桌子上放着一份今天的报纸，你可以看。冰箱里有很多好喝的饮料，不用客气。” 小明说：“没问题，你放心去旅行吧，我会小心的照顾你的花。”",
                 questions: [
-                    { q: "1. 作者明天要去哪里？", options: ["A. 去学校上课", "B. 去超市买东西", "C. 去外地出差", "D. 去医院看病"], a: 2 },
-                    { q: "2. 作者大概去多久才能回来？", options: ["A. 一天", "B. 一个星期", "C. 一个月", "D. 一年"], a: 1 },
-                    { q: "3. 作者不放心家里的什么东西？", options: ["A. 电脑", "B. 狗", "C. 钱", "D. 花"], a: 3 },
-                    { q: "4. 作者请谁帮忙？", options: ["A. 小明", "B. 珍妮", "C. 王经理", "D. 老师"], a: 0 },
-                    { q: "5. 作者请朋友替他做什么？", options: ["A. 打扫房间", "B. 浇水", "C. 做饭", "D. 洗衣服"], a: 1 },
-                    { q: "6. 这些花有什么特点？", options: ["A. 喜欢阳光", "B. 长得很高", "C. 很喜欢水", "D. 开红色的花"], a: 2 },
-                    { q: "7. 作者告诉朋友要多久浇一次水？", options: ["A. 每天", "B. 每星期", "C. 每个月", "D. 想起来就浇"], a: 0 },
-                    { q: "8. 客厅桌子上放着什么？", options: ["A. 一本书", "B. 一份今天的报纸", "C. 一块蛋糕", "D. 一张地图"], a: 1 },
-                    { q: "9. 作者对朋友说“不用客气”是因为什么？", options: ["A. 让朋友随便看报纸和喝饮料", "B. 让朋友把花带回家", "C. 让朋友在家里睡觉", "D. 让朋友穿衣服"], a: 0 },
-                    { q: "10. 朋友回答了什么？", options: ["A. 我很忙，没有时间", "B. 没问题，我会小心照顾的", "C. 我不喜欢花", "D. 我也要去旅行"], a: 1 }
+                    { q: "1. 作者明天要去哪里？", options: ["A. 去学校上课", "B. 去超市买东西", "C. 去外地出差", "D. 去医院看病"], a: 2 }, { q: "2. 作者大概去多久才能回来？", options: ["A. 一天", "B. 一个星期", "C. 一个月", "D. 一年"], a: 1 }, { q: "3. 作者不放心家里的什么东西？", options: ["A. 电脑", "B. 狗", "C. 钱", "D. 花"], a: 3 }, { q: "4. 作者请谁帮忙？", options: ["A. 小明", "B. 珍妮", "C. 王经理", "D. 老师"], a: 0 }, { q: "5. 作者请朋友替他做什么？", options: ["A. 打扫房间", "B. 浇水", "C. 做饭", "D. 洗衣服"], a: 1 }, { q: "6. 这些花有什么特点？", options: ["A. 喜欢阳光", "B. 长得很高", "C. 很喜欢水", "D. 开红色的花"], a: 2 }, { q: "7. 作者告诉朋友要多久浇一次水？", options: ["A. 每天", "B. 每星期", "C. 每个月", "D. 想起来就浇"], a: 0 }, { q: "8. 客厅桌子上放着什么？", options: ["A. 一本书", "B. 一份今天的报纸", "C. 一块蛋糕", "D. 一张地图"], a: 1 }, { q: "9. 作者对朋友说“不用客气”是因为什么？", options: ["A. 让朋友随便看报纸和喝饮料", "B. 让朋友把花带回家", "C. 让朋友在家里睡觉", "D. 让朋友穿衣服"], a: 0 }, { q: "10. 朋友回答了什么？", options: ["A. 我很忙，没有时间", "B. 没问题，我会小心照顾的", "C. 我不喜欢花", "D. 我也要去旅行"], a: 1 }
+                ]
+            }
+        ],
+        "4": [
+            {
+                passage: "冬天快到了，天气越来越冷。周末，年轻的妈妈带我去超市买衣服。我想买一件羽绒服。超市里有各种各样的衣服，而且今天正好打折，很多衣服都很便宜。我们看中了一件红色的，我试了一下，觉得有点儿长，也有点儿肥，不太合适。妈妈说：“你再试一下那件浅蓝色的吧。” 我试了试，大小很合适，颜色也不深，穿在身上非常好看。妈妈当然很高兴，给我买下了这件羽绒服。买完衣服，我们觉得有点儿饿，就去买了一点儿好吃的蛋糕。",
+                questions: [
+                    { q: "1. 妈妈周末带作者去哪里了？", options: ["A. 公园", "B. 学校", "C. 超市", "D. 银行"], a: 2 }, { q: "2. 他们去超市主要想买什么？", options: ["A. 蛋糕", "B. 羽绒服", "C. 饮料", "D. 裤子"], a: 1 }, { q: "3. 今天的衣服为什么很便宜？", options: ["A. 因为是旧的", "B. 因为打折", "C. 因为没有人买", "D. 因为衣服不好看"], a: 1 }, { q: "4. 作者试的第一件衣服是什么颜色的？", options: ["A. 浅蓝色", "B. 深蓝色", "C. 红色", "D. 绿色"], a: 2 }, { q: "5. 为什么作者没买第一件羽绒服？", options: ["A. 因为太短了", "B. 因为太贵了", "C. 因为有点儿长也有点儿肥", "D. 因为妈妈不喜欢"], a: 2 }, { q: "6. 第二件羽绒服的颜色怎么样？", options: ["A. 是深红色的", "B. 是黑色的", "C. 是浅蓝色的", "D. 是绿色的"], a: 2 }, { q: "7. 第二件羽绒服穿在身上合适吗？", options: ["A. 很合适，也很好看", "B. 太长了", "C. 太肥了", "D. 不好看"], a: 0 }, { q: "8. 妈妈最后买了哪件羽绒服？", options: ["A. 红色的", "B. 浅蓝色的", "C. 都没有买", "D. 买了两件"], a: 1 }, { q: "9. 买完衣服后，他们觉得怎么样？", options: ["A. 很累", "B. 有点儿饿", "C. 生病了", "D. 不高兴"], a: 1 }, { q: "10. 他们最后买了什么吃的东西？", options: ["A. 苹果", "B. 面包", "C. 蛋糕", "D. 西瓜"], a: 2 }
+                ]
+            },
+            {
+                passage: "这是一张我们班的照片。照片上站着很多年轻的学生和一位老师。我是大学三年级的学生，我的同学们又聪明又努力。上课的时候，大家总是很认真地听老师讲课。老师问问题的时候，大家都很热情地回答。明天我们学校有一场重要的足球比赛，大家下课后都去操场练习。练习的时候大家都很累。老师很关心我们，给我们买了很多水。我们觉得我们的老师非常好。",
+                questions: [
+                    { q: "1. 照片上有什么人？", options: ["A. 客人和经理", "B. 年轻的学生和老师", "C. 医生和护士", "D. 妈妈和孩子"], a: 1 }, { q: "2. 照片上的人是坐着还是站着？", options: ["A. 坐着", "B. 站着", "C. 跑着", "D. 没写"], a: 1 }, { q: "3. 作者是几年级的学生？", options: ["A. 一年级", "B. 二年级", "C. 三年级", "D. 四年级"], a: 2 }, { q: "4. 作者的同学们怎么样？", options: ["A. 又聪明又努力", "B. 很不认真", "C. 总是迟到", "D. 不喜欢学习"], a: 0 }, { q: "5. 上课的时候，大家是怎么听课的？", options: ["A. 一边听一边玩游戏", "B. 很安静地睡觉", "C. 很认真地听讲", "D. 不听老师说话"], a: 2 }, { q: "6. 老师问问题时，大家怎么做？", options: ["A. 没人回答", "B. 热情地回答", "C. 出去玩", "D. 看着老师不说话"], a: 1 }, { q: "7. 明天学校有什么活动？", options: ["A. 考试", "B. 去旅行", "C. 足球比赛", "D. 晚会"], a: 2 }, { q: "8. 下课后大家去了哪里？", options: ["A. 操场", "B. 图书馆", "C. 宿舍", "D. 超市"], a: 0 }, { q: "9. 练习足球的时候，大家感觉怎么样？", options: ["A. 很饿", "B. 很高兴", "C. 很舒服", "D. 很累"], a: 3 }, { q: "10. 老师给大家买了什么？", options: ["A. 蛋糕", "B. 咖啡", "C. 水", "D. 衬衫"], a: 2 }
+                ]
+            },
+            {
+                passage: "今天是周末，家里来了一些客人，是我爸爸的同事。妈妈非常热情地欢迎他们。客人们坐下后，妈妈问他们想喝什么饮料，家里有很多种，有绿茶、红茶，还有咖啡。因为客人们坐了很长时间的火车，他们觉得又累又饿。所以我去超市买了一些好吃的东西。客人们一边吃蛋糕，一边喝茶，觉得很舒服。他们夸我很聪明，也很认真。我问客人：“你们可以在我家多住几天吗？” 客人笑着回答：“当然可以，谢谢你的热情。”",
+                questions: [
+                    { q: "1. 今天是什么时候？", options: ["A. 周一", "B. 周末", "C. 早上", "D. 晚上"], a: 1 }, { q: "2. 家里来了什么人？", options: ["A. 我的同学", "B. 爸爸的同事（客人）", "C. 我的老师", "D. 邻居"], a: 1 }, { q: "3. 妈妈是怎么欢迎客人的？", options: ["A. 很热情", "B. 不高兴", "C. 没有说话", "D. 让他们站着"], a: 0 }, { q: "4. 家里有什么饮料？", options: ["A. 只有水", "B. 绿茶、红茶和咖啡", "C. 只有牛奶", "D. 只有可乐"], a: 1 }, { q: "5. 客人们为什么觉得累？", options: ["A. 因为爬山了", "B. 因为工作很忙", "C. 因为坐了很长时间的火车", "D. 因为走路来的"], a: 2 }, { q: "6. 客人们除了觉得累，还觉得怎么样？", options: ["A. 渴了", "B. 饿了", "C. 头疼", "D. 高兴"], a: 1 }, { q: "7. 谁去超市买东西了？", options: ["A. 爸爸", "B. 妈妈", "C. 作者（我）", "D. 客人"], a: 2 }, { q: "8. 客人们一边喝茶一边吃什么？", options: ["A. 苹果", "B. 面包", "C. 蛋糕", "D. 西瓜"], a: 2 }, { q: "9. 客人们夸作者什么？", options: ["A. 聪明又认真", "B. 衣服很好看", "C. 唱歌好听", "D. 菜做得好吃"], a: 0 }, { q: "10. 客人同意在作者家多住几天吗？", options: ["A. 不同意", "B. 没回答", "C. 说要马上走", "D. 笑着回答当然可以"], a: 3 }
+                ]
+            }
+        ],
+        "5": [
+            {
+                passage: "一年有四个季节。现在是春天，天气一天比一天暖和，公园里的草也变绿了。但是我最近有点儿感冒，还发烧了。因为昨天我觉得有点儿热，就穿了夏天的短裙子。妈妈非常着急，她没去上班，一直在家照顾我，还为我做了好吃的面条。今天早上我感觉好多了，不用吃药了。医生告诉我，春天天气的变化很快，不要越热越少穿衣服，要多注意健康。",
+                questions: [
+                    { q: "1. 一年有几个季节？", options: ["A. 两个", "B. 三个", "C. 四个", "D. 五个"], a: 2 }, { q: "2. 现在是什么季节？", options: ["A. 春天", "B. 夏天", "C. 秋天", "D. 冬天"], a: 0 }, { q: "3. 春天公园里的草怎么样了？", options: ["A. 变黄了", "B. 变红了", "C. 变绿了", "D. 没有变化"], a: 2 }, { q: "4. 作者最近身体怎么了？", options: ["A. 腿疼", "B. 感冒、发烧了", "C. 变胖了", "D. 咳嗽"], a: 1 }, { q: "5. 作者为什么会生病？", options: ["A. 因为去游泳了", "B. 因为没吃早饭", "C. 因为昨天穿了夏天的裙子", "D. 因为喝了凉水"], a: 2 }, { q: "6. 妈妈今天去上班了吗？", options: ["A. 去了", "B. 没去上班", "C. 迟到了", "D. 下午才去"], a: 1 }, { q: "7. 妈妈在家里为作者做了什么？", options: ["A. 买了新衣服", "B. 照顾作者，做了好吃的面条", "C. 唱了歌", "D. 玩了电脑游戏"], a: 1 }, { q: "8. 作者今天早上的感觉怎么样？", options: ["A. 越来越疼", "B. 还是很发烧", "C. 感觉好多了", "D. 不能走路"], a: 2 }, { q: "9. 作者今天还需要吃药吗？", options: ["A. 需要吃很多", "B. 需要吃一点儿", "C. 不用吃了", "D. 医生没说"], a: 2 }, { q: "10. 医生告诉作者要注意什么？", options: ["A. 春天天气变化快，别穿太少", "B. 要多喝咖啡", "C. 不要去公园", "D. 要多吃饭"], a: 0 }
+                ]
+            },
+            {
+                passage: "我叫大卫，今年二十二岁，属狗。时间过得真快，我去年还在努力复习准备考试，今年夏天我就要大学毕业了。后年我打算去中国学习汉语。我家里有一只可爱的小狗，它是我去年过生日的时候朋友送给我的礼物。这只小狗今年一岁多了，非常聪明。最近我越来越忙，因为我不仅要准备毕业考试，还要花很多时间照顾我的小狗。不过，每天跟小狗在一起，我觉得很快乐。",
+                questions: [
+                    { q: "1. 大卫今年多大了？", options: ["A. 二十岁", "B. 二十一岁", "C. 二十二岁", "D. 二十三岁"], a: 2 }, { q: "2. 大卫属什么？", options: ["A. 属猫", "B. 属狗", "C. 属马", "D. 属牛"], a: 1 }, { q: "3. 大卫去年在做什么？", options: ["A. 在中国学习", "B. 在找工作", "C. 在努力复习准备考试", "D. 在医院看病"], a: 2 }, { q: "4. 大卫什么时候大学毕业？", options: ["A. 去年", "B. 今年夏天", "C. 明天", "D. 后年"], a: 1 }, { q: "5. 大卫打算后年去哪里？", options: ["A. 去上海", "B. 去美国", "C. 去中国学习汉语", "D. 去公司上班"], a: 2 }, { q: "6. 大卫家里养了什么动物？", options: ["A. 熊猫", "B. 小狗", "C. 小猫", "D. 鸟"], a: 1 }, { q: "7. 这只小动物是怎么来的？", options: ["A. 朋友送的生日礼物", "B. 自己买的", "C. 在公园里捡的", "D. 妈妈给的"], a: 0 }, { q: "8. 这只小狗今年多大了？", options: ["A. 几个月", "B. 一岁多", "C. 两岁", "D. 三岁"], a: 1 }, { q: "9. 大卫最近为什么越来越忙？", options: ["A. 因为去旅行了", "B. 因为要工作", "C. 因为要准备毕业，还要照顾小狗", "D. 因为生病了"], a: 2 }, { q: "10. 大卫觉得每天跟小狗在一起怎么样？", options: ["A. 很累", "B. 很难过", "C. 很着急", "D. 很快乐"], a: 3 }
+                ]
+            },
+            {
+                passage: "今天是五月十六号，正好是我的二十岁生日。我的朋友们打算为我举行一个生日晚会。下午我们先去超市买了蛋糕、水果和很多好喝的饮料。晚会晚上八点开始，同学们都来参加了。大家坐在客厅里，一边吃甜甜的蛋糕一边聊天儿。朋友们不仅送给我很多礼物，还对我大声说：“祝你生日快乐！”。晚会结束的时间很晚，大家都有点儿累，但是今天我过得非常开心。如果明年大家也有时间，我还想跟朋友们一起过生日。",
+                questions: [
+                    { q: "1. 今天是几月几号？", options: ["A. 四月十六号", "B. 五月十号", "C. 五月十五号", "D. 五月十六号"], a: 3 }, { q: "2. 今天是谁的生日？", options: ["A. 朋友的生日", "B. 妈妈的生日", "C. 作者（我）的生日", "D. 老师的生日"], a: 2 }, { q: "3. 作者今天过几岁生日？", options: ["A. 十八岁", "B. 十九岁", "C. 二十岁", "D. 二十一岁"], a: 2 }, { q: "4. 朋友们为作者准备了什么？", options: ["A. 一场比赛", "B. 一次旅行", "C. 生日晚会", "D. 电影票"], a: 2 }, { q: "5. 下午他们去超市买了什么？", options: ["A. 衣服和鞋", "B. 字典和书", "C. 蛋糕、水果和饮料", "D. 蔬菜和肉"], a: 2 }, { q: "6. 晚会几点开始？", options: ["A. 下午五点", "B. 晚上七点", "C. 晚上八点", "D. 晚上十点"], a: 2 }, { q: "7. 晚会上大家在做什么？", options: ["A. 看电视", "B. 唱歌和跳舞", "C. 一边吃蛋糕一边聊天儿", "D. 玩游戏"], a: 2 }, { q: "8. 朋友们对作者说了什么？", options: ["A. 对不起", "B. 没关系", "C. 欢迎你", "D. 祝你生日快乐"], a: 3 }, { q: "9. 晚会结束时大家觉得怎么样？", options: ["A. 很生气", "B. 有点儿累，但很开心", "C. 很饿", "D. 很无聊"], a: 1 }, { q: "10. 作者希望明年怎么样？", options: ["A. 自己一个人过生日", "B. 不想过生日了", "C. 还想跟朋友们一起过生日", "D. 去外面吃饭"], a: 2 }
+                ]
+            }
+        ],
+        "6": [
+            {
+                passage: "我每天早上差十分七点起床。起床以后，我先洗澡，然后吃早饭。吃完早饭，我准时去学校。上午我有四节课，老师讲得非常清楚，大家都听得很明白。中午吃完午饭，我在教室里休息十分钟。下午三点，我去操场锻炼身体。我特别喜欢打篮球。锻炼以后，我跟朋友们一起聊天儿，然后去吃晚饭。晚上的时间，我经常在宿舍听听音乐。因为白天很累，所以我每天晚上十点就睡着了。",
+                questions: [
+                    { q: "1. 作者每天早上几点起床？", options: ["A. 七点", "B. 七点十分", "C. 差十分七点", "D. 六点"], a: 2 }, { q: "2. 起床以后，作者先做什么？", options: ["A. 洗澡", "B. 吃早饭", "C. 听音乐", "D. 锻炼身体"], a: 0 }, { q: "3. 上午作者有几节课？", options: ["A. 两节", "B. 三节", "C. 四节", "D. 五节"], a: 2 }, { q: "4. 上课的时候，老师讲得怎么样？", options: ["A. 听不明白", "B. 非常清楚", "C. 声音太小", "D. 很无聊"], a: 1 }, { q: "5. 作者吃完午饭在哪儿休息？", options: ["A. 宿舍", "B. 办公室", "C. 操场", "D. 教室"], a: 3 }, { q: "6. 下午三点作者去哪里做什么？", options: ["A. 去图书馆看书", "B. 去操场锻炼身体", "C. 去洗手间洗澡", "D. 去超市买东西"], a: 1 }, { q: "7. 作者特别喜欢哪种运动？", options: ["A. 游泳", "B. 跑步", "C. 爬山", "D. 打篮球"], a: 3 }, { q: "8. 作者锻炼以后做了什么？", options: ["A. 马上睡觉", "B. 回家洗澡", "C. 跟朋友聊天儿，然后吃晚饭", "D. 复习课文"], a: 2 }, { q: "9. 晚上在宿舍作者经常做什么？", options: ["A. 看电视", "B. 打游戏", "C. 听听音乐", "D. 看电影"], a: 2 }, { q: "10. 为什么作者晚上十点就睡着了？", options: ["A. 因为白天很累", "B. 因为生病了", "C. 因为音乐太好听", "D. 因为没有作业"], a: 0 }
+                ]
+            },
+            {
+                passage: "刚才我正在看书，突然发现我的眼镜不见了。没有眼镜，我看不清楚黑板上的字，也不明白老师讲的课文。我非常着急。我的同学小明看见了，马上过来帮忙找。我们在教室里找了很长时间，还是没有找到。然后我突然想起来，我去洗手间的时候，把眼镜放在洗手间里了。我马上离开教室去洗手间找。找回眼镜后，我又可以看清楚了。今天特别谢谢小明的帮忙。",
+                questions: [
+                    { q: "1. 刚才作者正在做什么？", options: ["A. 听音乐", "B. 聊天儿", "C. 看书", "D. 睡觉"], a: 2 }, { q: "2. 突然发生了什么事？", options: ["A. 下雨了", "B. 老师来了", "C. 眼镜不见了", "D. 同学哭了"], a: 2 }, { q: "3. 没有眼镜，作者怎么样？", options: ["A. 觉得很饿", "B. 觉得很舒服", "C. 看不清楚黑板上的字", "D. 听不清楚老师说话"], a: 2 }, { q: "4. 发现眼镜不见了，作者的心情怎么样？", options: ["A. 很高兴", "B. 非常着急", "C. 很生气", "D. 没关系"], a: 1 }, { q: "5. 谁过来给作者帮忙了？", options: ["A. 老师", "B. 经理", "C. 小明", "D. 秘书"], a: 2 }, { q: "6. 他们一开始在哪里找眼镜？", options: ["A. 操场上", "B. 公园里", "C. 教室里", "D. 宿舍里"], a: 2 }, { q: "7. 他们在教室里找到眼镜了吗？", options: ["A. 找到了", "B. 没找到", "C. 小明找到了", "D. 老师找到了"], a: 1 }, { q: "8. 作者突然想起来，眼镜可能在哪里？", options: ["A. 家里", "B. 书包里", "C. 洗手间里", "D. 桌子上"], a: 2 }, { q: "9. 作者为了找眼镜，做了什么？", options: ["A. 离开教室去洗手间", "B. 马上回家", "C. 去买新的", "D. 哭了起来"], a: 0 }, { q: "10. 作者最后特别感谢谁？", options: ["A. 老师", "B. 医生", "C. 妈妈", "D. 小明"], a: 3 }
+                ]
+            },
+            {
+                passage: "这个周末，我们班打算一起去爬山。老师告诉我们，星期六早上七点半，大家准时在学校前面的广场集合。每个学生都要带地图和水。差五分八点，大家上车，然后一起出发。在车上，有的同学在听音乐，有的同学在聊天儿。坐了一个半小时的车，我们下车了。这座山特别高，刚开始爬的时候，大家觉得很容易，但是慢慢地觉得有点儿累。下午四点，我们离开那里，坐车回学校。大家虽然觉得累，但是心情非常快乐。",
+                questions: [
+                    { q: "1. 这个周末大家打算去做什么？", options: ["A. 看电影", "B. 爬山", "C. 去超市买东西", "D. 去医院看病"], a: 1 }, { q: "2. 老师让大家几点集合？", options: ["A. 七点", "B. 七点半", "C. 八点", "D. 八点半"], a: 1 }, { q: "3. 集合的地方在哪里？", options: ["A. 学校里面的教室", "B. 学校前面的广场", "C. 老师家里", "D. 图书馆"], a: 1 }, { q: "4. 每个学生都需要带什么东西？", options: ["A. 电脑和手机", "B. 书和笔", "C. 地图和水", "D. 蛋糕和面包"], a: 2 }, { q: "5. 大家几点上车出发？", options: ["A. 七点半", "B. 差五分八点", "C. 八点", "D. 九点"], a: 1 }, { q: "6. 在车上同学们在做什么？", options: ["A. 睡觉和吃早饭", "B. 听音乐和聊天儿", "C. 做作业和复习", "D. 唱歌和跳舞"], a: 1 }, { q: "7. 他们坐了多长时间的车？", options: ["A. 一个小时", "B. 半个小时", "C. 两个小时", "D. 一个半小时"], a: 3 }, { q: "8. 刚开始爬山的时候大家觉得怎么样？", options: ["A. 很难", "B. 很容易", "C. 特别累", "D. 很无聊"], a: 1 }, { q: "9. 大家几点离开那里回学校？", options: ["A. 下午两点", "B. 下午三点", "C. 下午四点", "D. 晚上八点"], a: 2 }, { q: "10. 回学校的时候，大家的心情怎么样？", options: ["A. 又累又不高兴", "B. 很害怕", "C. 觉得累，但是非常快乐", "D. 觉得很着急"], a: 2 }
                 ]
             }
         ]
     };
-"4": {
-            wordBank: "比赛, 照片, 年级, 又, 聪明, 热情, 努力, 总是, 回答, 站, 饿, 蛋糕, 超市, 年轻, 认真, 客人, 羽绒服, 便宜, 长, 一点儿, 短, 深, 试, 浅, 可以, 当然, 肥, 合适, 好看, 种, 打折",
-            questions: [
-                { q: "明天下午我们学校有一场篮球 ________。", a: "比赛" },
-                { q: "这张 ________ 上的人是你姐姐吗？真漂亮。", a: "照片" },
-                { q: "你现在是大学几 ________ 的学生？", a: "年级" },
-                { q: "这个孩子 ________ 聪明又可爱。", a: "又" },
-                { q: "大家都说小明是一个非常 ________ 的学生，什么都会。", a: "聪明" },
-                { q: "这里的服务员对客人非常 ________。", a: "热情" },
-                { q: "只要你 ________ 学习，你的汉语一定会更好。", a: "努力" },
-                { q: "他 ________ 第一个来到办公室工作。", a: "总是" },
-                { q: "老师问了一个问题，但是没有人 ________。", a: "回答" },
-                { q: "别在门外 ________ 着了，快进来坐吧。", a: "站" },
-                { q: "早上没吃早饭，现在我觉得有点儿 ________ 了。", a: "饿" },
-                { q: "今天是朋友的生日，我给她买了一个大 ________。", a: "蛋糕" },
-                { q: "家里没有牛奶了，你去 ________ 买几瓶吧。", a: "超市" },
-                { q: "这位教我们听力课的老师非常 ________。", a: "年轻" },
-                { q: "哥哥做事非常 ________，经理很喜欢他。", a: "认真" },
-                { q: "今天周末，我家来了很多 ________。", a: "客人" },
-                { q: "冬天快到了，天气很冷，你需要买一件 ________。", a: "羽绒服" },
-                { q: "这件衣服不贵，非常 ________。", a: "便宜" },
-                { q: "这条裤子有点儿 ________，穿上不方便。", a: "长" },
-                { q: "饭菜有点儿咸，请给我 ________ 水喝。", a: "一点儿" },
-                { q: "夏天大家都喜欢穿 ________ 一点儿的衣服。", a: "短" },
-                { q: "这个颜色太 ________ 了，有浅一点儿的吗？", a: "深" },
-                { q: "我觉得这双鞋不错，我可以穿上 ________ 一下吗？", a: "试" },
-                { q: "年轻人穿 ________ 颜色的衬衫很好看。", a: "浅" },
-                { q: "劳驾，我 ________ 坐在这个座位上吗？", a: "可以" },
-                { q: "“我可以借你的汉英词典吗？” —— “________ 可以。”", a: "当然" },
-                { q: "这件衬衫太 ________ 了，你穿有点儿大。", a: "肥" },
-                { q: "这双鞋不大也不小，大小非常 ________。", a: "合适" },
-                { q: "这件羽绒服不仅便宜，而且穿上很 ________。", a: "好看" },
-                { q: "超市里有很多 ________ 饮料，你想喝哪一种？", a: "种" },
-                { q: "今天这家商店正在 ________，我们去看看吧。", a: "打折" }
-            ]
-        },
-        "5": {
-            wordBank: "发烧, 为, 照顾, 用, 感冒, 季节, 春天, 草, 夏天, 裙子, 最近, 越, 年, 今年, 明年, 去年, 后年, 毕业, 多, 岁, 属, 狗, 月, 号, 生日, 正好, 过, 准备, 举行, 晚会, 参加, 时间, 快乐",
-            questions: [
-                { q: "昨天下了大雨，我不小心淋雨，今天就 ________ 了。", a: "感冒" },
-                { q: "你的头很热，是不是 ________ 了？快去医院看看。", a: "发烧" },
-                { q: "妈妈每天都早起 ________ 我们做早饭。", a: "为" },
-                { q: "奶奶生病了，妈妈在医院里 ________ 她。", a: "照顾" },
-                { q: "只是一个小感冒，不 ________ 去医院看医生。", a: "用" },
-                { q: "一年有四个 ________，你最喜欢哪一个？", a: "季节" },
-                { q: "________ 天气变暖和了，公园里的花都开了。", a: "春天" },
-                { q: "外面的 ________ 变绿了，非常漂亮。", a: "草" },
-                { q: "________ 天气太热了，大家都喜欢去游泳。", a: "夏天" },
-                { q: "姐姐新买了一条红色的 ________，穿上很好看。", a: "裙子" },
-                { q: "我 ________ 太忙了，没有时间去跟朋友看电影。", a: "最近" },
-                { q: "他的汉语说得 ________ 来越流利了。", a: "越" },
-                { q: "大学学习一般需要四 ________ 的时间。", a: "年" },
-                { q: "我是 ________ 来到中国学习的，已经学习一年了。", a: "去年" },
-                { q: "________ 是2026年，明年就是2027年了。", a: "今年" },
-                { q: "哥哥今年夏天就要大学 ________ 了，正在找工作。", a: "毕业" },
-                { q: "你今年 ________ 大了？", a: "多" },
-                { q: "我的小妹妹今年只有五 ________。", a: "岁" },
-                { q: "你是哪一年出生的，________ 什么？", a: "属" },
-                { q: "我很喜欢小动物，家里养了一只小 ________。", a: "狗" },
-                { q: "今天是八 ________ 十五号，天气很不错。", a: "月" },
-                { q: "明天是我的生日，也就是五月十 ________。", a: "号" },
-                { q: "祝你生日 ________！", a: "快乐" },
-                { q: "你来得 ________，我们正打算去吃午饭，一起去吧。", a: "正好" },
-                { q: "周末我们打算去朋友家 ________ 生日。", a: "过" },
-                { q: "我们正在 ________ 明天的汉语考试，有很多生词。", a: "准备" },
-                { q: "学校下个星期要 ________ 一场非常热闹的比赛。", a: "举行" },
-                { q: "今天晚上有一个生日 ________，你想去吗？", a: "晚会" },
-                { q: "你有 ________ 跟我一起去超市买点儿东西吗？", a: "时间" },
-                { q: "每天都能做自己喜欢的事情，我觉得很 ________。", a: "快乐" }
-            ]
-        },
-        "6": {
-            wordBank: "眼镜, 突然, 离开, 清楚, 刚才, 帮忙, 特别, 讲, 明白, 锻炼, 音乐, 公园, 聊天儿, 睡着, 更, 每, 早上, 起床, 早饭, 午饭, 晚饭, 差, 分钟, 节, 教室, 操场, 洗澡, 然后, 集合, 准时",
-            questions: [
-                { q: "我看不清黑板上的字，因为没戴 ________。", a: "眼镜" },
-                { q: "天气预报没说下雨，怎么 ________ 下起大雨来了？", a: "突然" },
-                { q: "他上个月 ________ 了北京，去了上海工作。", a: "离开" },
-                { q: "老师写在黑板上的汉字，你都看 ________ 了吗？", a: "清楚" },
-                { q: "________ 经理还在办公室，现在不知道去哪儿了。", a: "刚才" },
-                { q: "这个箱子太重了，你能过来给我帮个 ________ 吗？", a: "帮忙" },
-                { q: "今天的汉语课 ________ 难，很多词我都不懂。", a: "特别" },
-                { q: "请你给大家 ________ 一下这道题怎么做吧。", a: "讲" },
-                { q: "听了老师的话，我终于 ________ 这个词的意思了。", a: "明白" },
-                { q: "爷爷每天早上都去公园 ________ 身体。", a: "锻炼" },
-                { q: "睡觉前听听 ________，可以让人觉得很放松。", a: "音乐" },
-                { q: "周末我常去 ________ 散步、看花。", a: "公园" },
-                { q: "下课后，我和同学们在宿舍里喝茶、________。", a: "聊天儿" },
-                { q: "昨天晚上我喝了咖啡，所以很晚才 ________。", a: "睡着" },
-                { q: "这件衣服比那件衣服 ________ 漂亮。", a: "更" },
-                { q: "________ 个星期天，我们都去打篮球。", a: "每" },
-                { q: "________ 六点半，妈妈就起来做早饭了。", a: "早上" },
-                { q: "昨晚睡得太晚，今天早上我不想 ________。", a: "起床" },
-                { q: "你今天吃 ________ 了吗？我请你吃包子。", a: "早饭" },
-                { q: "中午十二点我们下课，然后一起去吃 ________。", a: "午饭" },
-                { q: "晚上我们不打算出去吃 ________，想在家里自己做。", a: "晚饭" },
-                { q: "现在是 ________ 五分八点，快要迟到了。", a: "差" },
-                { q: "从我家到学校走路需要十分 ________。", a: "分钟" },
-                { q: "今天上午我们有四 ________ 课。", a: "节" },
-                { q: "学生们都在 ________ 里安静地看书。", a: "教室" },
-                { q: "下午有很多学生在 ________ 上踢足球。", a: "操场" },
-                { q: "运动完以后，我回宿舍洗了个 ________。", a: "洗澡" },
-                { q: "我每天先复习生词，________ 做作业。", a: "然后" },
-                { q: "明天早上八点，大家在学校门口 ________。", a: "集合" },
-                { q: "火车是九点开的，请大家 ________ 到达火车站。", a: "准时" }
-            ]
-        }
-    // ==========================================
-    // KHU VỰC ĐIỀU KHIỂN LOGIC (JS)
-    // ==========================================
 
-    // 1. Logic chuyển Tab
     function openTab(evt, tabId) {
         let tabContents = document.getElementsByClassName("tab-content");
         for (let i = 0; i < tabContents.length; i++) {
@@ -1036,23 +274,15 @@
         evt.currentTarget.classList.add("active");
     }
 
-    // 2. Logic Tải Dữ Liệu khi chọn Bài
     function loadAllData() {
         let lesson = document.getElementById("globalLessonSelect").value;
-        
-        // Tải Từ Vựng
         currentLessonVocab = vocabData[lesson] || [];
         wrongAttempts = 0;
         nextWord();
-
-        // Tải Điền Từ
         renderFill(lesson);
-
-        // Tải Đọc Hiểu
         renderRead(lesson);
     }
 
-    // -- LOGIC TAB TỪ VỰNG --
     let currentLessonVocab = [];
     let currentWord = {};
     let wrongAttempts = 0;
@@ -1102,7 +332,6 @@
         }
     }
 
-    // -- LOGIC TAB ĐIỀN TỪ --
     function renderFill(lesson) {
         let container = document.getElementById("fillContainer");
         let bankDisplay = document.getElementById("wordBankDisplay");
@@ -1111,7 +340,7 @@
         resultDiv.innerHTML = "";
         
         if (!fillData[lesson]) {
-            bankDisplay.innerText = "Chưa có dữ liệu cho bài này.";
+            bankDisplay.innerText = "Chưa có dữ liệu bài tập cho bài này.";
             return;
         }
 
@@ -1148,7 +377,6 @@
         document.getElementById("result-fill").innerHTML = `<h3 class="correct">Bạn đúng ${score} / ${questions.length} câu!</h3>`;
     }
 
-    // -- LOGIC TAB ĐỌC HIỂU --
     function renderRead(lesson) {
         let container = document.getElementById("readContainer");
         let resultDiv = document.getElementById("result-read");
@@ -1156,7 +384,7 @@
         resultDiv.innerHTML = "";
 
         if (!readData[lesson]) {
-            container.innerHTML = "<p>Chưa có dữ liệu cho bài này.</p>";
+            container.innerHTML = "<p>Chưa có dữ liệu bài tập cho bài này.</p>";
             return;
         }
 
@@ -1208,7 +436,6 @@
         document.getElementById("result-read").innerHTML = `<h3 class="correct">Bạn đúng ${score} / ${globalQuestionCount} câu!</h3>`;
     }
 
-    // Cho phép ấn Enter để kiểm tra nhanh ở tab Từ Vựng
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("meaningInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
@@ -1224,7 +451,6 @@
         });
     });
 
-    // Khởi chạy khi mở web
     window.onload = loadAllData;
 </script>
 
